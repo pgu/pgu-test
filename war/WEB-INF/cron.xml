@@ -3,7 +3,7 @@
   <cron>
     <url>/sendMail</url>
     <description>send an email</description>
-    <schedule>every day 02:00</schedule>
+    <schedule>every day 13:00</schedule>
     <!-- <schedule>every 1 minutes</schedule>  -->
   </cron>
 </cronentries>
