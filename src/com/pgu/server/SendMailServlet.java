@@ -48,7 +48,7 @@ public class SendMailServlet extends HttpServlet {
         msg.setFrom(new InternetAddress("guilcher.pascal.dev@gmail.com", "The boss"));
         msg.addRecipient(Message.RecipientType.TO, new InternetAddress("guilcher.pascal@gmail.com", "The customer"));
         msg.setSubject("email subject");
-        msg.setText("email body test");
+        msg.setText("email body test\nsee this: http://pgu-calendar.appspot.com/\n");
 
         Transport.send(msg);
 
