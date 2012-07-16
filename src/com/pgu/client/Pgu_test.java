@@ -13,6 +13,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -47,6 +48,76 @@ public class Pgu_test implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
+
+        final Button btnCreateBooks = new Button("create 1000 books");
+        final Button btnFetchBooks = new Button("fetch 1000 books");
+        final Button btnDeleteBooks = new Button("delete all books");
+
+        final VerticalPanel vp = new VerticalPanel();
+        vp.add(btnCreateBooks);
+        vp.add(btnFetchBooks);
+        vp.add(btnDeleteBooks);
+        RootPanel.get().add(vp);
+
+        btnCreateBooks.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.createBooks(new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        Window.alert("successfully created");
+                    }
+
+                });
+            }
+        });
+
+        btnFetchBooks.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.fetchBooks(new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        Window.alert("successfully fetched");
+                    }
+
+                });
+            }
+        });
+
+        btnDeleteBooks.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.deleteBooks(new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        Window.alert("successfully deleted");
+                    }
+
+                });
+            }
+        });
 
         Event.addNativePreviewHandler(new NativePreviewHandler() {
 
@@ -115,7 +186,7 @@ public class Pgu_test implements EntryPoint {
         closeButton.getElement().setId("closeButton");
         final Label textToServerLabel = new Label();
         final HTML serverResponseLabel = new HTML();
-        final VerticalPanel dialogVPanel = new VerticalPanel();
+        final VerticalPanel dialogVPanel = vp;
         dialogVPanel.addStyleName("dialogVPanel");
         dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
         dialogVPanel.add(textToServerLabel);
