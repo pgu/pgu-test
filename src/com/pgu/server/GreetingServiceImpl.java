@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
 import com.pgu.shared.Book;
 import com.pgu.shared.FieldVerifier;
@@ -52,9 +53,10 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
     @Override
     public void createBooks() {
-        for (int i = 0; i < 1000; i++) {
+        // 1000 done
+        for (int i = 0; i < 10; i++) {
             final Book book = new Book();
-            book.setTitle("t" + i);
+            book.setTitle("t" + 1000 + i);
             dao.ofy().put(book);
         }
     }
@@ -63,15 +65,23 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
     public void fetchBooks() {
         final ArrayList<Long> bookIds = new ArrayList<Long>();
 
-        final QueryResultIterator<Book> bookItr = dao.ofy().query(Book.class).iterator();
+        final Query<Book> q = dao.ofy().query(Book.class);
+        System.out.println("count: " + q.count());
+
+        final QueryResultIterator<Book> bookItr = q.iterator();
+
         while (bookItr.hasNext()) {
             bookIds.add(bookItr.next().getId());
         }
 
+        final Query<Book> mainQ = dao.ofy().query(Book.class).filter("id in", bookIds);
+        System.out.println("count: " + mainQ.count());
+
+        final QueryResultIterator<Book> _bookItr = mainQ.iterator();
+
         final StringBuilder sb = new StringBuilder();
-        final QueryResultIterator<Book> _bookItr = dao.ofy().query(Book.class).filter("id in", bookIds).iterator();
         while (_bookItr.hasNext()) {
-            sb.append(_bookItr + ",");
+            sb.append(_bookItr.next().getId() + ",");
         }
         System.out.print(sb.toString());
 
