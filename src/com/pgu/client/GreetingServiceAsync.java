@@ -7,4 +7,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface GreetingServiceAsync {
     void greetServer(String input, AsyncCallback<String> callback) throws IllegalArgumentException;
+
+    void createBooks(AsyncCallback<Void> asyncCallback);
+
+    void fetchBooks(AsyncCallback<Void> asyncCallback);
+
+    void deleteBooks(AsyncCallback<Void> asyncCallback);
 }
