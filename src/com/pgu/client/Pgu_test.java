@@ -13,7 +13,9 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
@@ -129,7 +131,62 @@ public class Pgu_test implements EntryPoint {
         cellBrowser.setHeight("300px");
         cellBrowser.setAnimationEnabled(true);
 
+        final Button btnImportJson = new Button("Import json");
+        final HTML importResultBox = new HTML();
+        final TextBox searchBox = new TextBox();
+        final Button btnSearch = new Button("Search");
+        final HTML searchResultBox = new HTML();
+
+        btnImportJson.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.importProfileJson(new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        importResultBox.setHTML("KO<br/>" + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        importResultBox.setHTML("OK");
+                    }
+                });
+            }
+        });
+
+        btnSearch.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+
+                if ("".equals(searchBox.getText().trim())) {
+                    return;
+                }
+
+                greetingService.searchProfile(searchBox.getText(), new AsyncCallback<String>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        searchResultBox.setHTML("KO<br/>" + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(final String result) {
+                        searchResultBox.setHTML(result);
+                    }
+
+                });
+            }
+        });
+
         final VerticalPanel vp = new VerticalPanel();
+        vp.add(btnImportJson);
+        vp.add(importResultBox);
+        vp.add(searchBox);
+        vp.add(btnSearch);
+        vp.add(searchResultBox);
         vp.add(btnCreateBooks);
         vp.add(btnFetchBooks);
         vp.add(btnDeleteBooks);

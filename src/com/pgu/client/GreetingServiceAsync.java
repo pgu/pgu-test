@@ -13,4 +13,8 @@ public interface GreetingServiceAsync {
     void fetchBooks(AsyncCallback<Void> asyncCallback);
 
     void deleteBooks(AsyncCallback<Void> asyncCallback);
+
+    void importProfileJson(AsyncCallback<Void> asyncCallback);
+
+    void searchProfile(String text, AsyncCallback<String> asyncCallback);
 }

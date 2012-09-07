@@ -15,4 +15,8 @@ public interface GreetingService extends RemoteService {
     void fetchBooks();
 
     void deleteBooks();
+
+    void importProfileJson();
+
+    String searchProfile(String text);
 }

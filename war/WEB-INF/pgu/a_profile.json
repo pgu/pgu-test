@@ -1,0 +1,244 @@
+{
+  "educations": {
+    "_total": 4,
+    "values": [
+      {
+        "activities": "",
+        "degree": "",
+        "endDate": {"year": 2005},
+        "fieldOfStudy": "International Trade",
+        "id": 23039762,
+        "notes": "3 months for the Master2's courses in Rostock, Germany",
+        "schoolName": "Universität Rostock",
+        "startDate": {"year": 2005}
+      },
+      {
+        "activities": "",
+        "degree": "",
+        "endDate": {"year": 2005},
+        "fieldOfStudy": "Master 2 International Trade",
+        "id": 23039761,
+        "notes": "Master 2 International Trade, English + German + French",
+        "schoolName": "Université de Nantes",
+        "startDate": {"year": 2004}
+      },
+      {
+        "activities": "",
+        "degree": "",
+        "endDate": {"year": 2004},
+        "fieldOfStudy": "Software Engineer",
+        "id": 3392191,
+        "notes": "Ecole Polytechnique de l'Université de Nantes (ex-IRESTE), Computer Science Division (ex-SILR),\n\nhttp://web.polytech.univ-nantes.fr/76349314/1/fiche___pagelibre/&RH=POLYTECH_FR1&RF=POLYTECH_EN1",
+        "schoolName": "Polytech'Nantes",
+        "startDate": {"year": 2001}
+      },
+      {
+        "activities": "",
+        "degree": "",
+        "endDate": {"year": 2001},
+        "fieldOfStudy": "Prépa MP/MPSI",
+        "id": 23039657,
+        "notes": "Intensive Mathematics and Physics courses for the competitive exams of the Grandes Écoles.",
+        "schoolName": "Lycée Clémenceau",
+        "startDate": {"year": 1999}
+      }
+    ]
+
+  },
+  "firstName": "John",
+  "headline": "Senior Web Java J2EE Engineer Developer at SFEIR",
+  "id": "Qjrp4c3fc3",
+  "languages": {
+    "_total": 4,
+    "values": [
+      {
+        "language": {"name": "French"},
+        "proficiency": {
+          "level": "native_or_bilingual",
+          "name": "Native or bilingual proficiency"
+        }
+      },
+      {
+        "language": {"name": "English"},
+        "proficiency": {
+          "level": "full_professional",
+          "name": "Full professional proficiency"
+        }
+      },
+      {
+        "language": {"name": "Spanish"},
+        "proficiency": {
+          "level": "full_professional",
+          "name": "Full professional proficiency"
+        }
+      },
+      {
+        "language": {"name": "German"},
+        "proficiency": {
+          "level": "professional_working",
+          "name": "Professional working proficiency"
+        }
+      }
+    ]
+  },
+  "lastName": "Guilcher",
+  "location": {
+    "country": {"code": "fr"},
+    "name": "Paris Area, France"
+  },
+  "numConnections": 83,
+  "numConnectionsCapped": false,
+  "positions": {
+    "_total": 7,
+    "values": [
+      {
+        "company": {
+          "industry": "Computer Software",
+          "name": "SFEIR"
+        },
+        "isCurrent": true,
+        "id": 1,
+        "location": {"name": "Paris, France"},
+        "startDate": {
+          "month": 11,
+          "year": 2011
+        },
+        "summary": "...Doing Stuff...  \n\n- REST\n- NOSQL\n- GIT\n",
+        "title": "Senior Web Java J2EE Engineer Developer"
+      },
+      {
+        "company": {
+          "id": 25906,
+          "industry": "Information Technology and Services",
+          "name": "SFEIR",
+          "size": "201-500 employees",
+          "type": "Privately Held"
+        },
+        "endDate": {
+          "month": 10,
+          "year": 2011
+        },
+        "isCurrent": false,
+        "id": 2,
+        "location": {"name": "Paris, France"},
+        "startDate": {
+          "month": 8,
+          "year": 2011
+        },
+        "summary": "PROJECT\nWeb application for a SaaS solution about stores management (team: 2 persons)\n\nTASKS\nDeveloping the web application from the persistent layer to the UI layer in the context of an agile process (SCRUM):\n° Developing CRUD and complex screens (GWT, RPC, DAO, Objectify)\n° Developing the app's navigation with a Google-like menu\n° Developing the planning generation engine. \n   \u203a  Its main objective is to take into account all the parameters (tasks, products, employees, working times...), to combine them in order to generate the planning of the selected day with features such as splitting tasks around each other, sharing them between appropriate employees, ...\n° Developing the Google-Calendar-like planning with the following features\n   \u203a  5 minutes time frames\n   \u203a  Drag'n'drop of the tasks inside the planning and from a tasks toolbar\n   \u203a  Resizing tasks like Google-Calendar (but horizontally here)\n   \u203a  Moving automatically adjacent tasks when moving a task\n   \u203a  Google Docs-like auto saving\n° Developing a PIN code screen and a tasks dashboard for the employee, to use with a tactile screen, for validating its work progress\n\nTECHNOLOGIES\nCSS3, Java 1.6, GWT, GWT-DND, GIN, Guava, Objectify, App Engine\n\nMISCELLANEOUS\nGIT, MAVEN, JENKINS",
+        "title": "Senior Web Java J2EE Engineer Developer"
+      },
+      {
+        "company": {
+          "id": 25906,
+          "industry": "Information Technology and Services",
+          "name": "SFEIR",
+          "size": "201-500 employees",
+          "type": "Privately Held"
+        },
+        "endDate": {
+          "month": 7,
+          "year": 2011
+        },
+        "isCurrent": false,
+        "id": 3,
+        "location": {"name": "Paris, France"},
+        "startDate": {
+          "month": 9,
+          "year": 2010
+        },
+        "summary": "PROJECT\nWeb application for the mass retail sector (team: 4 persons)\n\nTASKS\nDeveloping some of the web application's modules from the persistent layer to the UI layer in the context of an agile process (SCRUM):\n° Developing CRUD screens (GWT, RPC, DAO, SQL)\n° Developing the templates module for reportings and emails (Velocity)\n° Developing the PDF and Excel imports and exports (iText, Apache POI)\n° Developing the automatic email's scheduler (Quartz)\n° Integrating new concepts and tools: MVP, Places, Gin, Guice, Junit, Mockito, Guava\n° Working on code review (Sonar)\n° Developing Ibatis mappings and SQL queries\n° Specifying and developing with design patterns\n° Using Dozer for mapping server-side entities and DTOs\n° Writing SVN hooks in Bash for controlling commits\n\nTECHNOLOGIES\nGWT, Ajax, CSS, Java 1.6, Gin, Guice, Spring, Ibatis, SQL, Junit, Mockito, POI, QUARTZ, iTEXT, Guava, Bash\n\nMISCELLANEOUS\nTomcat, Microsoft SQL Server, Eclipse, Maven, SVN, Hudson, Trac, Cygwin, Agile development",
+        "title": "Senior Web Java J2EE Engineer Developer"
+      },
+      {
+        "company": {
+          "id": 7572,
+          "industry": "Information Technology and Services",
+          "name": "ELCA Informática",
+          "size": "501-1000 employees",
+          "type": "Privately Held"
+        },
+        "endDate": {
+          "month": 8,
+          "year": 2010
+        },
+        "isCurrent": false,
+        "id": 4,
+        "location": {"name": "Madrid, Spain; Lausanne, Switzerland"},
+        "startDate": {
+          "month": 10,
+          "year": 2007
+        },
+        "summary": "PROJECT\nSecutix2, a Ticketing Solution (team: ~ 50 persons)\n\nTASKS\nDeveloping features for the web application's modules from the persistent layer to the UI layer according to specifications:\n° Developing CRUD screens for functional entities such as simple tickets, season tickets, ...\n° Developing complex rates grids (multi-dimensional, dynamic granularity display, formatting money according to the user's preferences, automatic comparison with other rates grids,  ...)\n° Developing a module for comparing and merging contacts\n° Developing a module for importing and exporting data with a third-party software\n° Developing SQL scripts for the Oracle database \n° Specifying and developing with design patterns:\n   \u203a  Hibernate mappings with annotations on persistent entities\n   \u203a  Using Criteria queries, Hibernate Query Language and SQL in the DAOs to manipulate the persistent entities\n   \u203a  Developing services with transactional annotations\n   \u203a  Customizing spring MVC framework for the application's crud screens\n° Developing responsive and elegant UI components with object-oriented Javascript (ExtJS)\n\nTECHNOLOGIES\nExtJS, Ajax, HTML, CSS, DOM, Javascript, JSON, JSP, UEL, Java 1.6, Spring (AOP, MVC, ORM, Transactions), Hibernate (Criteria Queries, HQL, Annotations), PL/SQL\n\nMISCELLANEOUS\nTomcat, Oracle, Eclipse, Maven, SVN, Hudson, Jira, Cygwin",
+        "title": "Senior Web Java J2EE Engineer Developer"
+      },
+      {
+        "company": {
+          "id": 4172,
+          "industry": "Information Technology and Services",
+          "name": "Sopra Group",
+          "size": "10,001+ employees",
+          "type": "Public Company"
+        },
+         "endDate": {
+          "month": 9,
+          "year": 2007
+        },
+        "isCurrent": false,
+        "id": 5,
+        "location": {"name": "Madrid, Spain"},
+        "startDate": {
+          "month": 1,
+          "year": 2006
+        },
+        "summary": "PROJECT\nANPE, Agence Nationale Pour l\u2019Emploi, www.anpe.fr (team: ~ 20 persons)\n\nTASKS\nDeveloping new features for the candidates, employers and anpe's advisors web applications, from the persistent layer to the UI layer according to specifications:\n° Developing SQL scripts for the Oracle database \n° Specifying and developping according to design patterns:\n   \u203a  entity beans for the persistence layer\n   \u203a  DAOs with Jdbc for handling the entity beans\n   \u203a  services with stateless session beans\n   \u203a  servlets and JSPs for serving dynamic content\n° Using Struts to implement a MVC architecture\n° Using Javascript to give dynamism to the UI\n° Migrating from an Ant build process of one web application to a Maven build process of several web applications\n\nTECHNOLOGIES\nJavascript, Struts, J2EE, JSP, Servlet, EJB, JDBC, Java\n\nMISCELLANEOUS\nWeblogic, Oracle, Eclipse, Ant, Maven, CVS, Toad, Cygwin",
+        "title": "Junior Web Java J2EE Engineer Developer"
+      },
+      {
+        "company": {
+          "id": 1864,
+          "industry": "Mechanical or Industrial Engineering",
+          "name": "3M",
+          "size": "10,001+ employees",
+          "ticker": "MMM",
+          "type": "Public Company"
+        },
+        "endDate": {
+          "month": 4,
+          "year": 2005
+        },
+        "isCurrent": false,
+        "id": 6,
+         "location": {"name": "Düsseldorf, Germany"},
+        "startDate": {
+          "month": 1,
+          "year": 2005
+        },
+        "summary": "° Internship of 4 months for the Master2's course\nWorking on a new market research on ERPs and Best-of-breeds in the field of Supply Chain Execution in Europe and especially in Germany.",
+        "title": "Market research internship"
+      },
+      {
+        "company": {
+          "industry": "Computer Software",
+          "name": "Czech Technical University, CVUT"
+        },
+        "endDate": {
+          "month": 6,
+          "year": 2004
+        },
+        "isCurrent": false,
+        "id": 7,
+        "location": {"name": "Prague, Czech Republic"},
+        "startDate": {
+          "month": 1,
+          "year": 2004
+        },
+        "summary": "° Internship for the Engineer's courses\nWorking on the SVG specifications and modelling an interface between SVG (graphical language) and OWL (ontology language).",
+        "title": "Computer Science internship"
+      }
+    ]
+  },
+  "publicProfileUrl": "http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955",
+  "specialties": "Ajax, J2EE, Java, Javascript, Eclipse, French, English, Spanish, German",
+  "summary": "A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career."
+}

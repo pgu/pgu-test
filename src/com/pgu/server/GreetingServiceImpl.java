@@ -1,8 +1,20 @@
 package com.pgu.server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
+import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
@@ -94,4 +106,68 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
             dao.ofy().delete(bookItr.next());
         }
     }
+
+    private Index profileIdx;
+
+    private Index getProfileIdx() {
+        if (profileIdx == null) {
+            profileIdx = SearchServiceFactory.getSearchService().getIndex(
+                    IndexSpec.newBuilder().setName("profile_index"));
+        }
+        return profileIdx;
+    }
+
+    @Override
+    public void importProfileJson() {
+
+        final String jsonProfileA = profileTest("a_profile.json");
+        final String jsonProfileB = profileTest("b_profile.json");
+
+        final Document.Builder docBuilderA = Document.newBuilder();
+        docBuilderA.addField(Field.newBuilder().setName("profile").setText(jsonProfileA));
+        getProfileIdx().add(docBuilderA.build());
+
+        final Document.Builder docBuilderB = Document.newBuilder();
+        docBuilderB.addField(Field.newBuilder().setName("profile").setText(jsonProfileB));
+        getProfileIdx().addAsync(docBuilderB.build());
+
+    }
+
+    @Override
+    public String searchProfile(final String text) {
+        final String _query = "~\"" + text + "\"";
+        final com.google.appengine.api.search.Query mainQuery = com.google.appengine.api.search.Query.newBuilder() //
+                .build(_query);
+
+        final Results<ScoredDocument> docs = getProfileIdx().search(mainQuery);
+
+        final StringBuilder sb = new StringBuilder();
+        for (final ScoredDocument doc : docs) {
+            sb.append(doc.getOnlyField("profile"));
+            sb.append("<br/>");
+            sb.append("<br/>");
+            sb.append("<br/>");
+        }
+
+        return sb.toString();
+    }
+
+    private String profileTest(final String filename) {
+
+        final InputStream is = getServletContext().getResourceAsStream("/WEB-INF/pgu/" + filename);
+        final BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+
+        final StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+        return sb.toString();
+    }
+
 }
