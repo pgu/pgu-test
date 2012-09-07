@@ -3,6 +3,8 @@ package com.pgu.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellBrowser;
@@ -13,7 +15,11 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,6 +31,12 @@ public class Pgu_test implements EntryPoint {
     private final GreetingServiceAsync greetingService  = GWT.create(GreetingService.class);
     private boolean                    isCtrlSAvailable = true;
 
+    private final ListBox              listBox          = new ListBox();
+    private final Label                selection        = new Label();
+
+    /**
+     * This is the entry point method.
+     */
     @Override
     public void onModuleLoad() {
 
@@ -123,6 +135,22 @@ public class Pgu_test implements EntryPoint {
 
             private void doSomethingOnCtrlS() {
                 GWT.log(" " + System.currentTimeMillis());
+            }
+        });
+
+        listBox.addItem("dummy", (String) null);
+        listBox.addItem("item0");
+        listBox.addItem("item1");
+
+        RootPanel.get().add(selection);
+        RootPanel.get().add(listBox);
+
+        listBox.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(final ChangeEvent event) {
+                final String value = listBox.getValue(listBox.getSelectedIndex());
+                selection.setText(value + ", isNull? " + value.equals("null"));
             }
         });
 
