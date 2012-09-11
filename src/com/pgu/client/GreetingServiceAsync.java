@@ -1,5 +1,7 @@
 package com.pgu.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -17,4 +19,11 @@ public interface GreetingServiceAsync {
     void importProfileJson(AsyncCallback<Void> asyncCallback);
 
     void searchProfile(String text, AsyncCallback<String> asyncCallback);
+
+    void importGeopoints(AsyncCallback<String> asyncCallback);
+
+    void searchLocations(String keyword, String lat, String lng, String dist,
+            AsyncCallback<ArrayList<String>> asyncCallback);
+
+    void searchKeyword(String keyword, AsyncCallback<ArrayList<String>> asyncCallback);
 }

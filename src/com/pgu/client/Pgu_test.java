@@ -1,5 +1,7 @@
 package com.pgu.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
@@ -15,9 +17,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -209,7 +209,126 @@ public class Pgu_test implements EntryPoint {
             }
         });
 
+        final Button btnImportLocations = new Button("Import geopoints");
+        final HTML importLocationsResultBox = new HTML();
+
+        btnImportLocations.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.importGeopoints(new AsyncCallback<String>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        importLocationsResultBox.setHTML("KO<br/>" + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(final String result) {
+                        importLocationsResultBox.setHTML(result);
+                    }
+
+                });
+            }
+        });
+
+        final TextBox keywordBox = new TextBox();
+        final TextBox latitudeBox = new TextBox();
+        final TextBox longitudeBox = new TextBox();
+        final TextBox distanceBox = new TextBox();
+        final Button searchLocations = new Button("Search locations");
+        final Button searchKeywords = new Button("Search keywords");
+        final HTML resultSearchLocations = new HTML();
+        final HTML resultSearchKeywords = new HTML();
+
+        searchLocations.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                final String keyword = keywordBox.getText().trim();
+                final String lat = latitudeBox.getText().trim();
+                final String lng = longitudeBox.getText().trim();
+                final String dist = distanceBox.getText().trim();
+
+                if (!lat.isEmpty() //
+                        && !lng.isEmpty() //
+                        && !dist.isEmpty() //
+                ) {
+
+                    resultSearchLocations.setHTML("");
+
+                    greetingService.searchLocations(keyword, lat, lng, dist, new AsyncCallback<ArrayList<String>>() {
+
+                        @Override
+                        public void onFailure(final Throwable caught) {
+                            resultSearchLocations.setHTML("KO<br/>" + caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(final ArrayList<String> result) {
+                            final StringBuilder sb = new StringBuilder();
+                            for (final String string : result) {
+                                sb.append(string);
+                                sb.append("<br/>");
+                            }
+                            resultSearchLocations.setHTML(sb.toString());
+                        }
+
+                    });
+                }
+            }
+        });
+
+        searchKeywords.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+
+                final String keyword = keywordBox.getText().trim();
+                if (!keyword.isEmpty()) {
+
+                    resultSearchKeywords.setHTML("");
+
+                    greetingService.searchKeyword(keyword, new AsyncCallback<ArrayList<String>>() {
+
+                        @Override
+                        public void onFailure(final Throwable caught) {
+                            resultSearchKeywords.setHTML("KO<br/>" + caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(final ArrayList<String> result) {
+                            final StringBuilder sb = new StringBuilder();
+                            for (final String string : result) {
+                                sb.append(string);
+                                sb.append("<br/>");
+                            }
+                            resultSearchKeywords.setHTML(sb.toString());
+                        }
+
+                    });
+                }
+            }
+
+        });
+
         final VerticalPanel vp = new VerticalPanel();
+        vp.setSpacing(5);
+        vp.add(btnImportLocations);
+        vp.add(importLocationsResultBox);
+        vp.add(new Label("Keyword"));
+        vp.add(keywordBox);
+        vp.add(new Label("Lat"));
+        vp.add(latitudeBox);
+        vp.add(new Label("Lng"));
+        vp.add(longitudeBox);
+        vp.add(new Label("Dist (m)"));
+        vp.add(distanceBox);
+        vp.add(searchLocations);
+        vp.add(searchKeywords);
+        vp.add(resultSearchLocations);
+        vp.add(resultSearchKeywords);
+        // -----------------
         vp.add(btnImportJson);
         vp.add(importResultBox);
         vp.add(searchBox);

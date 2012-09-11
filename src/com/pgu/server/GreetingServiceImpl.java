@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.GeoPoint;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.Results;
@@ -20,6 +21,7 @@ import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
 import com.pgu.shared.Book;
 import com.pgu.shared.FieldVerifier;
+import com.pgu.shared.MyLocation;
 
 /**
  * The server side implementation of the RPC service.
@@ -170,4 +172,75 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         return sb.toString();
     }
 
+    private Index testIdx;
+
+    private Index getTestIdx() {
+        if (testIdx == null) {
+            testIdx = SearchServiceFactory.getSearchService().getIndex(IndexSpec.newBuilder().setName("test_index"));
+        }
+        return testIdx;
+    }
+
+    @Override
+    public String importGeopoints() {
+
+        addGeoDocument("java, j2ee", MyLocation.Prague, MyLocation.Rostock);
+        addGeoDocument("gwt, app engine", MyLocation.Brest);
+        addGeoDocument("python, django", MyLocation.Nantes, MyLocation.Madrid);
+        addGeoDocument("ruby, rails", MyLocation.Paris);
+
+        return "OK";
+    }
+
+    private static final String field_keywords = "keywords";
+    private static final String field_location = "location";
+
+    private void addGeoDocument(final String keywords, final MyLocation... locations) {
+
+        for (final MyLocation loc : locations) {
+
+            final GeoPoint geoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+
+            final Document.Builder docBuilder = Document.newBuilder();
+            docBuilder.addField(Field.newBuilder().setName(field_keywords).setText(keywords));
+            docBuilder.addField(Field.newBuilder().setName(field_location).setGeoPoint(geoPoint));
+
+            getTestIdx().add(docBuilder.build());
+        }
+    }
+
+    @Override
+    public ArrayList<String> searchLocations(final String keyword, final String lat, final String lng, final String dist) {
+        final ArrayList<String> locations = new ArrayList<String>();
+
+        String queryKeyword = "";
+        if (!keyword.isEmpty()) {
+            queryKeyword = field_keywords + ":\"" + keyword + "\" AND ";
+        }
+
+        final String queryTemplate = "distance(%s, geopoint(%s, %s)) < %s";
+        final String query = String.format(queryKeyword + queryTemplate, field_location, lat, lng, dist);
+
+        final Results<ScoredDocument> results = getTestIdx().search(query);
+
+        for (final ScoredDocument doc : results) {
+            locations.add(doc.getOnlyField(field_keywords).getText());
+        }
+
+        return locations;
+    }
+
+    @Override
+    public ArrayList<String> searchKeyword(final String keyword) {
+        final ArrayList<String> results = new ArrayList<String>();
+
+        final String query = field_keywords + ":\"" + keyword + "\"";
+        final Results<ScoredDocument> docs = getTestIdx().search(query);
+
+        for (final ScoredDocument doc : docs) {
+            results.add(doc.getOnlyField(field_keywords).getText());
+        }
+
+        return results;
+    }
 }

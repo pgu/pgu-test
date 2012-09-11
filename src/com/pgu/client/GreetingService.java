@@ -1,5 +1,7 @@
 package com.pgu.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -19,4 +21,10 @@ public interface GreetingService extends RemoteService {
     void importProfileJson();
 
     String searchProfile(String text);
+
+    String importGeopoints();
+
+    ArrayList<String> searchLocations(String keyword, String lat, String lng, String dist);
+
+    ArrayList<String> searchKeyword(String keyword);
 }
