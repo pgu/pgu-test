@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -23,6 +24,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pgu.client.ui.MyViewImpl;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -253,7 +255,7 @@ public class Pgu_test implements EntryPoint {
                 if (!lat.isEmpty() //
                         && !lng.isEmpty() //
                         && !dist.isEmpty() //
-                ) {
+                        ) {
 
                     resultSearchLocations.setHTML("");
 
@@ -312,8 +314,50 @@ public class Pgu_test implements EntryPoint {
 
         });
 
+        final Button btnTestJSNI = new Button("test jsni");
+        final Label testJsniBox = new Label();
+
+        btnTestJSNI.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                testJsniBox.setText("");
+
+                final String test = "{\"userId\":\"123465\", \"friends\":[{\"name\":\"toto\",\"color\":\"red\"},{\"name\":\"tata\",\"color\":\"blue\"},{\"name\":\"titi\",\"color\":\"green\"}]}";
+                final String colorsHTML = showColors(Pgu_test.this, test);
+                testJsniBox.setText(colorsHTML);
+            }
+        });
+
+        final Button testFnBtn = new Button("Test fn");
+        testFnBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                final JavaScriptObject fn = giveMeAFunction();
+                useThisFunction(fn);
+
+            }
+        });
+
+        final MyViewImpl view = new MyViewImpl();
+        final Button testViewBtn = new Button("test view");
+        testViewBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                modifyView(view);
+            }
+        });
+
+
         final VerticalPanel vp = new VerticalPanel();
         vp.setSpacing(5);
+        vp.add(view);
+        vp.add(testViewBtn);
+        // -----------------
+        vp.add(testFnBtn);
+        // -----------------
         vp.add(btnImportLocations);
         vp.add(importLocationsResultBox);
         vp.add(new Label("Keyword"));
@@ -338,6 +382,52 @@ public class Pgu_test implements EntryPoint {
         vp.add(btnFetchBooks);
         vp.add(btnDeleteBooks);
         vp.add(cellBrowser);
+        vp.add(btnTestJSNI);
+        vp.add(testJsniBox);
         RootPanel.get().add(vp);
+
     }
+
+    public native String showColors(Pgu_test view, String json) /*-{
+
+		var obj = JSON.parse(json);
+		$wnd.console.log('userId ' + obj.userId);
+
+		var friends = obj.friends;
+
+		return view.@com.pgu.client.Pgu_test::showColors(Lcom/google/gwt/core/client/JavaScriptObject;)(friends);
+
+    }-*/;
+
+    public native String showColors(JavaScriptObject friends) /*-{
+		$wnd.console.log('friends ' + friends.length);
+
+		var colors = [];
+
+		for ( var i in friends) {
+			var friend = friends[i];
+
+			colors.push(friend.color);
+			colors.push('<br/>');
+		}
+
+		return colors.join('');
+    }-*/;
+
+    public static native JavaScriptObject giveMeAFunction() /*-{
+        var callback = function() {
+            $wnd.console.log('Hello de LU');
+        };
+
+        return callback;
+    }-*/;
+
+    public static native void useThisFunction(JavaScriptObject fn) /*-{
+        fn();
+    }-*/;
+
+    public static native void modifyView(MyViewImpl view) /*-{
+        view.@com.pgu.client.ui.MyViewImpl::setText(Ljava/lang/String;)('!! TOTO !!');
+    }-*/;
+
 }
