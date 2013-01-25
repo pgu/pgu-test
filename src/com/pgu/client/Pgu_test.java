@@ -426,8 +426,15 @@ public class Pgu_test implements EntryPoint {
         fn();
     }-*/;
 
-    public static native void modifyView(MyViewImpl view) /*-{
-        view.@com.pgu.client.ui.MyViewImpl::setText(Ljava/lang/String;)('!! TOTO !!');
+    public native void modifyView(MyViewImpl view) /*-{
+        view.@com.pgu.client.ui.MyViewImpl::setText(Ljava/lang/String;) //
+        ('!! TOTO !!');
+
+        this.@com.pgu.client.Pgu_test::console(Ljava/lang/String;)('toto');
+    }-*/;
+
+    public native void console(String msg) /*-{
+        $wnd.console.log(msg);
     }-*/;
 
 }
