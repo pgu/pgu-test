@@ -7,6 +7,6 @@
     </ui:style>
     <g:HTMLPanel>
         Hello,
-        <g:Button styleName="{style.important}" ui:field="button" />
+        <g:Button styleName="{style.important}" ui:field="button" text="click" />
     </g:HTMLPanel>
 </ui:UiBinder> 

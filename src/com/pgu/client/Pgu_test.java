@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -143,9 +144,6 @@ public class Pgu_test implements EntryPoint {
         listBox.addItem("dummy", (String) null);
         listBox.addItem("item0");
         listBox.addItem("item1");
-
-        RootPanel.get().add(selection);
-        RootPanel.get().add(listBox);
 
         listBox.addChangeHandler(new ChangeHandler() {
 
@@ -350,41 +348,100 @@ public class Pgu_test implements EntryPoint {
             }
         });
 
+        // ----------------- form for prospective search
+        final Label authorLabel = new Label("author");
+        final TextBox authorBox = new TextBox();
 
-        final VerticalPanel vp = new VerticalPanel();
-        vp.setSpacing(5);
-        vp.add(view);
-        vp.add(testViewBtn);
+        final Label bodyLabel = new Label("body");
+        final TextBox bodyBox = new TextBox();
+
+        final Label labelsLabel = new Label("labels");
+        final TextBox labelsBox = new TextBox();
+
+        final Button commentSaveBtn = new Button("Save");
+
+        commentSaveBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.putComment( //
+                        authorBox.getValue() //
+                        , bodyBox.getValue() //
+                        , labelsBox.getValue() //
+                        , new AsyncCallback<Void>() {
+
+                            @Override
+                            public void onFailure(final Throwable caught) {
+                                Window.alert("failure");
+                            }
+
+                            @Override
+                            public void onSuccess(final Void result) {
+                                Window.alert("success");
+                            }
+                        });
+            }
+        });
+
         // -----------------
-        vp.add(testFnBtn);
+        final VerticalPanel vp1 = new VerticalPanel();
+        vp1.setSpacing(5);
         // -----------------
-        vp.add(btnImportLocations);
-        vp.add(importLocationsResultBox);
-        vp.add(new Label("Keyword"));
-        vp.add(keywordBox);
-        vp.add(new Label("Lat"));
-        vp.add(latitudeBox);
-        vp.add(new Label("Lng"));
-        vp.add(longitudeBox);
-        vp.add(new Label("Dist (m)"));
-        vp.add(distanceBox);
-        vp.add(searchLocations);
-        vp.add(searchKeywords);
-        vp.add(resultSearchLocations);
-        vp.add(resultSearchKeywords);
+        vp1.add(selection);
+        vp1.add(listBox);
         // -----------------
-        vp.add(btnImportJson);
-        vp.add(importResultBox);
-        vp.add(searchBox);
-        vp.add(btnSearch);
-        vp.add(searchResultBox);
-        vp.add(btnCreateBooks);
-        vp.add(btnFetchBooks);
-        vp.add(btnDeleteBooks);
-        vp.add(cellBrowser);
-        vp.add(btnTestJSNI);
-        vp.add(testJsniBox);
-        RootPanel.get().add(vp);
+        vp1.add(view);
+        vp1.add(testViewBtn);
+        // -----------------
+        vp1.add(testFnBtn);
+        // -----------------
+        vp1.add(btnImportLocations);
+        vp1.add(importLocationsResultBox);
+        vp1.add(new Label("Keyword"));
+        vp1.add(keywordBox);
+        vp1.add(new Label("Lat"));
+        vp1.add(latitudeBox);
+        vp1.add(new Label("Lng"));
+        vp1.add(longitudeBox);
+        vp1.add(new Label("Dist (m)"));
+        vp1.add(distanceBox);
+        vp1.add(searchLocations);
+        vp1.add(searchKeywords);
+        vp1.add(resultSearchLocations);
+        vp1.add(resultSearchKeywords);
+        // -----------------
+        vp1.add(btnImportJson);
+        vp1.add(importResultBox);
+        vp1.add(searchBox);
+        vp1.add(btnSearch);
+        vp1.add(searchResultBox);
+        vp1.add(btnCreateBooks);
+        vp1.add(btnFetchBooks);
+        vp1.add(btnDeleteBooks);
+        vp1.add(cellBrowser);
+        vp1.add(btnTestJSNI);
+        vp1.add(testJsniBox);
+
+        // -----------------
+        final VerticalPanel vp2 = new VerticalPanel();
+        vp2.setSpacing(5);
+        // -----------------
+        vp2.add(authorLabel);
+        vp2.add(authorBox);
+
+        vp2.add(bodyLabel);
+        vp2.add(bodyBox);
+
+        vp2.add(labelsLabel);
+        vp2.add(labelsBox);
+
+        vp2.add(commentSaveBtn);
+
+        // -----------------
+        final HorizontalPanel hp = new HorizontalPanel();
+        hp.add(vp1);
+        hp.add(vp2);
+        RootPanel.get().add(hp);
 
     }
 

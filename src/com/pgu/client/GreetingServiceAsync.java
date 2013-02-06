@@ -26,4 +26,7 @@ public interface GreetingServiceAsync {
             AsyncCallback<ArrayList<String>> asyncCallback);
 
     void searchKeyword(String keyword, AsyncCallback<ArrayList<String>> asyncCallback);
+
+    void putComment(String author, String body, String labels, AsyncCallback<Void> asyncCallback);
+
 }

@@ -6,8 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.GeoPoint;
@@ -29,6 +34,8 @@ import com.pgu.shared.MyLocation;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
+    private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+
     private final DAO dao = new DAO();
 
     @Override
@@ -48,7 +55,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         userAgent = escapeHtml(userAgent);
 
         return "Hello, " + input + "!<br><br>I am running " + serverInfo + ".<br><br>It looks like you are using:<br>"
-                + userAgent;
+        + userAgent;
     }
 
     /**
@@ -243,4 +250,54 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
         return results;
     }
+
+    @Override
+    public void putComment(final String author, final String body, final String labels) {
+
+        final Entity entity = new Entity("comment", "example");
+
+        entity.setProperty("author", author);
+
+        // Use Text to store long strings in the datastore.
+        entity.setProperty("body", new Text(body));
+        entity.setProperty("length", body.length());
+
+        final String[] _labels = labels.split(", ");
+        entity.setProperty("labels", Arrays.asList(_labels));
+
+        datastoreService.put(entity);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

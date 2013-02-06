@@ -27,4 +27,6 @@ public interface GreetingService extends RemoteService {
     ArrayList<String> searchLocations(String keyword, String lat, String lng, String dist);
 
     ArrayList<String> searchKeyword(String keyword);
+
+    void putComment(String author, String body, String labels);
 }
