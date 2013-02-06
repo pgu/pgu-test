@@ -30,7 +30,13 @@ public class ReceiveXMPPServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
 
-
+        // TODO PGU Feb 6, 2013
+        // TODO PGU Feb 6, 2013
+        // TODO PGU Feb 6, 2013
+        // TODO PGU Feb 6, 2013
+        // TODO PGU Feb 6, 2013 faire une entity
+        // TODO PGU Feb 6, 2013
+        // TODO PGU Feb 6, 2013
         final XMPPService xmpp = XMPPServiceFactory.getXMPPService();
         final Message message = xmpp.parseMessage(req);
 

@@ -278,9 +278,12 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
     }
 
     @Override
-    public void inviteToChat(final String text) {
-        // TODO Auto-generated method stub
+    public void inviteToChat(final String bareJid) {
 
+        final JID jid = new JID(bareJid);
+
+        final XMPPService xmppService = XMPPServiceFactory.getXMPPService();
+        xmppService.sendInvitation(jid);
     }
 
     @Override
