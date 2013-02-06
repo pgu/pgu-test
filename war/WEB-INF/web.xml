@@ -30,6 +30,7 @@
 <!--  -->
 <!-- Xmpp -->  
 <!--  -->
+<!-- Messages xmpp -->  
   <servlet>
     <servlet-name>sendXmpp</servlet-name>
     <servlet-class>com.pgu.server.SendXMPPServlet</servlet-class>
@@ -40,6 +41,7 @@
     <servlet-class>com.pgu.server.ReceiveXMPPServlet</servlet-class>
   </servlet>
   
+<!-- Subscriptions xmpp -->  
   <servlet>
     <servlet-name>subscribeXmpp</servlet-name>
     <servlet-class>com.pgu.server.SubscribeXMPPServlet</servlet-class>
@@ -58,6 +60,28 @@
   <servlet>
     <servlet-name>unsubscribedXmpp</servlet-name>
     <servlet-class>com.pgu.server.UnsubscribedXMPPServlet</servlet-class>
+  </servlet>
+  
+<!-- Presences xmpp -->  
+  <servlet>
+    <servlet-name>availableXmpp</servlet-name>
+    <servlet-class>com.pgu.server.AvailableXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>unavailableXmpp</servlet-name>
+    <servlet-class>com.pgu.server.UnavailableXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>probeXmpp</servlet-name>
+    <servlet-class>com.pgu.server.ProbeXMPPServlet</servlet-class>
+  </servlet>
+  
+<!-- Error xmpp -->  
+  <servlet>
+    <servlet-name>errorXmpp</servlet-name>
+    <servlet-class>com.pgu.server.ErrorXMPPServlet</servlet-class>
   </servlet>
 
 <!--  -->
@@ -93,6 +117,7 @@
 <!--  -->
 <!-- Xmpp -->  
 <!--  -->
+<!-- Messages xmpp -->  
   <servlet-mapping>
     <servlet-name>sendXmpp</servlet-name>
     <url-pattern>/sendXmpp</url-pattern>
@@ -103,6 +128,7 @@
     <url-pattern>/_ah/xmpp/message/chat/</url-pattern>
   </servlet-mapping>
   
+<!-- Subscriptions xmpp -->    
   <servlet-mapping>
     <servlet-name>subscribeXmpp</servlet-name>
     <url-pattern>/_ah/xmpp/subscription/subscribe/</url-pattern>
@@ -123,6 +149,28 @@
     <url-pattern>/_ah/xmpp/subscription/unsubscribed/</url-pattern>
   </servlet-mapping>
   
+<!-- Presences xmpp -->  
+  <servlet-mapping>
+    <servlet-name>availableXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/presence/available/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>unavailableXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/presence/unavailable/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>probeXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/presence/probe/</url-pattern>
+  </servlet-mapping>
+  
+<!-- Error xmpp -->  
+  <servlet-mapping>
+    <servlet-name>errorXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/error/</url-pattern>
+  </servlet-mapping>
+
 <!--  -->
 <!-- Prospective search -->  
 <!--  -->

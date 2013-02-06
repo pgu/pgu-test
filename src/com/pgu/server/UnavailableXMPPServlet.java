@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.pgu.shared.UserXmpp;
 
 @SuppressWarnings("serial")
-public class SubscribeXMPPServlet extends HttpServlet {
+public class UnavailableXMPPServlet extends HttpServlet {
 
     private final DAO dao = new DAO();
     private final XmppHelper helper = new XmppHelper();
@@ -18,12 +18,12 @@ public class SubscribeXMPPServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
 
-        final UserXmpp user = helper.retrieveUserFromSubscription(req);
-        subscribe(user);
+        final UserXmpp user = helper.retrieveUserFromPresence(req);
+        setUnavailable(user);
     }
 
-    private void subscribe(final UserXmpp user) {
-        user.setSubscriptionStatus("subscribe");
+    private void setUnavailable(final UserXmpp user) {
+        user.setPresenceStatus("unavailable");
         dao.ofy().put(user);
     }
 
