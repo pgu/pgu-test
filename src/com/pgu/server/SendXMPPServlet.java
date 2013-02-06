@@ -1,6 +1,7 @@
 package com.pgu.server;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +18,12 @@ import com.google.appengine.api.xmpp.XMPPServiceFactory;
 @SuppressWarnings("serial")
 public class SendXMPPServlet extends HttpServlet {
 
+    private final Logger log = Logger.getLogger(this.getClass().getName());
+
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+
+        log.info("send xmpp message ");
 
         final JID jid = new JID("guilcher.pascal@gmail.com");
         final String text = "hello world";

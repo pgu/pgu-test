@@ -17,7 +17,7 @@ import com.google.common.io.ByteStreams;
 @SuppressWarnings("serial")
 public class ErrorXMPPServlet extends HttpServlet {
 
-    private static final Logger log = Logger.getLogger(ErrorXMPPServlet.class.getName());
+    private final Logger log = Logger.getLogger(this.getClass().getName());
 
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {

@@ -3,6 +3,7 @@ package com.pgu.client;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pgu.shared.XmppUser;
 
 /**
  * The async counterpart of <code>GreetingService</code>.
@@ -28,5 +29,11 @@ public interface GreetingServiceAsync {
     void searchKeyword(String keyword, AsyncCallback<ArrayList<String>> asyncCallback);
 
     void putComment(String author, String body, String labels, AsyncCallback<Void> asyncCallback);
+
+    void sendChatMessage(String message, String selectedChatUserFullJid, AsyncCallback<String> asyncCallback);
+
+    void inviteToChat(String text, AsyncCallback<Void> asyncCallback);
+
+    void fetchAllConnectedUsers(AsyncCallback<ArrayList<XmppUser>> asyncCallback);
 
 }

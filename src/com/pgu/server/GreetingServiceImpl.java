@@ -11,6 +11,7 @@ import java.util.Arrays;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.search.Document;
@@ -21,12 +22,19 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SearchServiceFactory;
+import com.google.appengine.api.xmpp.JID;
+import com.google.appengine.api.xmpp.Message;
+import com.google.appengine.api.xmpp.MessageBuilder;
+import com.google.appengine.api.xmpp.SendResponse;
+import com.google.appengine.api.xmpp.XMPPService;
+import com.google.appengine.api.xmpp.XMPPServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
 import com.pgu.shared.Book;
 import com.pgu.shared.FieldVerifier;
 import com.pgu.shared.MyLocation;
+import com.pgu.shared.XmppUser;
 
 /**
  * The server side implementation of the RPC service.
@@ -267,6 +275,51 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
         datastoreService.put(entity);
 
+    }
+
+    @Override
+    public void inviteToChat(final String text) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String sendChatMessage(final String text, final String selectedChatUserFullJid) {
+        final JID jid = new JID(selectedChatUserFullJid);
+
+        final Message message = new MessageBuilder() //
+        .withRecipientJids(jid) //
+        .withBody(text) //
+        .build();
+
+        final XMPPService xmppService = XMPPServiceFactory.getXMPPService();
+
+        if (xmppService.getPresence(jid).isAvailable()) {
+            final SendResponse sendResponse = xmppService.sendMessage(message);
+
+            if (sendResponse.getStatusMap().get(jid) == SendResponse.Status.SUCCESS) {
+                return "OK";
+            } else {
+                return "NOT OK";
+            }
+
+        } else {
+            return "Unavailable";
+        }
+    }
+
+    @Override
+    public ArrayList<XmppUser> fetchAllConnectedUsers() {
+
+        final QueryResultIterable<XmppUser> queryResult = dao.ofy().query(XmppUser.class).filter("presenceStatus =", "available").fetch();
+        final QueryResultIterator<XmppUser> iterator = queryResult.iterator();
+
+        final ArrayList<XmppUser> users = new ArrayList<XmppUser>();
+        while (iterator.hasNext()) {
+            users.add(iterator.next());
+        }
+
+        return users;
     }
 
 

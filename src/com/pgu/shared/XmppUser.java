@@ -4,7 +4,7 @@ import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class UserXmpp implements IsSerializable {
+public class XmppUser implements IsSerializable {
 
     // fullJid <-> node@domain/resource
     // a node (such as the name of a user of a chat service),
@@ -36,7 +36,7 @@ public class UserXmpp implements IsSerializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final UserXmpp other = (UserXmpp) obj;
+        final XmppUser other = (XmppUser) obj;
         if (fullJid == null) {
             if (other.fullJid != null) {
                 return false;

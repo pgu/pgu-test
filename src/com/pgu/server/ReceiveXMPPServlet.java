@@ -3,6 +3,7 @@ package com.pgu.server;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,10 +22,14 @@ import com.google.appengine.api.xmpp.XMPPServiceFactory;
 @SuppressWarnings("serial")
 public class ReceiveXMPPServlet extends HttpServlet {
 
+    private final Logger log = Logger.getLogger(this.getClass().getName());
     private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+
+    private final XmppHelper helper = new XmppHelper();
 
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+
 
         final XMPPService xmpp = XMPPServiceFactory.getXMPPService();
         final Message message = xmpp.parseMessage(req);
@@ -32,10 +37,16 @@ public class ReceiveXMPPServlet extends HttpServlet {
         final JID fromJid = message.getFromJid();
         final String body = message.getBody();
 
+        final String fullJid = fromJid.getId();
+        final String bareJid = helper.toBareJid(fullJid);
+
+        log.info("receive xmpp message from: " + fullJid);
+
         // save messages
         final Entity entity = new Entity("chat_message", "example");
 
-        entity.setProperty("jid", fromJid);
+        entity.setProperty("full_jid", fullJid);
+        entity.setProperty("bare_jid", bareJid);
 
         entity.setProperty("body", new Text(body));
         entity.setProperty("length", body.length());

@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pgu.client.ui.MyViewImpl;
+import com.pgu.shared.XmppUser;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -364,6 +365,10 @@ public class Pgu_test implements EntryPoint {
 
             @Override
             public void onClick(final ClickEvent event) {
+                if ("".equals(authorBox.getText())) {
+                    return;
+                }
+
                 greetingService.putComment( //
                         authorBox.getValue() //
                         , bodyBox.getValue() //
@@ -377,9 +382,126 @@ public class Pgu_test implements EntryPoint {
 
                             @Override
                             public void onSuccess(final Void result) {
-                                Window.alert("success");
+                                console("success");
                             }
                         });
+            }
+        });
+
+        // -----------------
+        final ListBox chatUsersList = new ListBox();
+
+        final Label addresseeLabel = new Label("Addressee");
+        final TextBox addresseeBox = new TextBox();
+        final Button inviteToChatBtn = new Button("Invite to chat");
+
+        final Button refreshChatsUserBtn = new Button("Refresh");
+
+        inviteToChatBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                if ("".equals(addresseeBox.getText())) {
+                    return;
+                }
+
+                greetingService.inviteToChat(addresseeBox.getText() //
+                        , new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        Window.alert("failure");
+                    }
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        console("invitation is sent");
+                        chatUsersList.setEnabled(false);
+                        greetingService.fetchAllConnectedUsers(new AsyncCallback<ArrayList<XmppUser>>() {
+
+                            @Override
+                            public void onFailure(final Throwable caught) {
+                                chatUsersList.setEnabled(true);
+                                Window.alert("failure");
+                            }
+
+                            @Override
+                            public void onSuccess(final ArrayList<XmppUser> result) {
+                                chatUsersList.clear();
+
+                                for (final XmppUser xmppUser : result) {
+                                    chatUsersList.addItem(xmppUser.getBareJid(), xmppUser.getFullJid());
+                                }
+                                chatUsersList.setEnabled(true);
+                            }
+
+                        });
+                    }
+
+                });
+            }
+        });
+
+        refreshChatsUserBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.fetchAllConnectedUsers(new AsyncCallback<ArrayList<XmppUser>>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        Window.alert("failure");
+                    }
+
+                    @Override
+                    public void onSuccess(final ArrayList<XmppUser> result) {
+                        chatUsersList.clear();
+
+                        for (final XmppUser xmppUser : result) {
+                            chatUsersList.addItem(xmppUser.getBareJid(), xmppUser.getFullJid());
+                        }
+                    }
+                });
+            }
+        });
+
+        final Label chatMessageLabel = new Label("Chat message");
+        final TextBox chatMessageBox = new TextBox();
+        final Button sendMessageToChatBtn = new Button("Send");
+        final Label resultSendMessageLabel = new Label("");
+
+        sendMessageToChatBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                resultSendMessageLabel.setText("");
+
+                if ("".equals(chatMessageBox.getText())) {
+                    return;
+                }
+
+                final int selectedIndex = chatUsersList.getSelectedIndex();
+                if (selectedIndex == -1) {
+                    return;
+                }
+
+                final String selectedChatUserFullJid = chatUsersList.getValue(selectedIndex);
+
+                greetingService.sendChatMessage(chatMessageBox.getText() //
+                        , selectedChatUserFullJid //
+                        , new AsyncCallback<String>() {
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        Window.alert("failure");
+                    }
+
+                    @Override
+                    public void onSuccess(final String result) {
+                        console("message is sent " + result);
+                        resultSendMessageLabel.setText(result);
+                    }
+                });
             }
         });
 
@@ -438,9 +560,26 @@ public class Pgu_test implements EntryPoint {
         vp2.add(commentSaveBtn);
 
         // -----------------
+        final VerticalPanel vp3 = new VerticalPanel();
+        vp3.setSpacing(5);
+        // -----------------
+        vp3.add(addresseeLabel);
+        vp3.add(addresseeBox);
+        vp3.add(inviteToChatBtn);
+
+        vp3.add(chatMessageLabel);
+        vp3.add(chatMessageBox);
+        vp3.add(sendMessageToChatBtn);
+        vp3.add(resultSendMessageLabel);
+
+        vp3.add(refreshChatsUserBtn);
+        vp3.add(chatUsersList);
+
+        // -----------------
         final HorizontalPanel hp = new HorizontalPanel();
         hp.add(vp1);
         hp.add(vp2);
+        hp.add(vp3);
         RootPanel.get().add(hp);
 
     }
@@ -472,15 +611,15 @@ public class Pgu_test implements EntryPoint {
     }-*/;
 
     public static native JavaScriptObject giveMeAFunction() /*-{
-        var callback = function() {
-            $wnd.console.log('Hello de LU');
-        };
+		var callback = function() {
+			$wnd.console.log('Hello de LU');
+		};
 
-        return callback;
+		return callback;
     }-*/;
 
     public static native void useThisFunction(JavaScriptObject fn) /*-{
-        fn();
+		fn();
     }-*/;
 
     public native void modifyView(MyViewImpl view) /*-{

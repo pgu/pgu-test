@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.pgu.shared.XmppUser;
 
 /**
  * The client side stub for the RPC service.
@@ -29,4 +30,10 @@ public interface GreetingService extends RemoteService {
     ArrayList<String> searchKeyword(String keyword);
 
     void putComment(String author, String body, String labels);
+
+    String sendChatMessage(String message, String selectedChatUserFullJid);
+
+    void inviteToChat(String text);
+
+    ArrayList<XmppUser> fetchAllConnectedUsers();
 }
