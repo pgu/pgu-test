@@ -31,6 +31,7 @@
     <service>xmpp_presence</service> 
     <service>xmpp_subscribe</service> <!-- subscriptions -->
     <service>xmpp_error</service>
+    <service>channel_presence</service> <!-- channel presence -->
   </inbound-services>  
   
 </appengine-web-app>

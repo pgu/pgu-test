@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.appengine.api.channel.ChannelService;
+import com.google.appengine.api.channel.ChannelServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.prospectivesearch.FieldType;
@@ -34,7 +39,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
 import com.pgu.shared.Book;
-import com.pgu.shared.Comment;
 import com.pgu.shared.FieldVerifier;
 import com.pgu.shared.MyLocation;
 import com.pgu.shared.PguSubscription;
@@ -46,9 +50,12 @@ import com.pgu.shared.XmppUser;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
-    //    private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+    private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 
     private final DAO dao = new DAO();
+
+    private final ProspectiveSearchService prospectiveSearchService = ProspectiveSearchServiceFactory.getProspectiveSearchService();
+    private final ChannelService channelService = ChannelServiceFactory.getChannelService();
 
     @Override
     public String greetServer(String input) throws IllegalArgumentException {
@@ -266,15 +273,25 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
     @Override
     public void putComment(final String author, final String body, final String labels) {
 
-        final Comment comment = new Comment();
-        comment.setAuthor(author);
-        comment.setBody(body);
-        comment.setLength(body.length());
-        comment.setBody(body);
-        comment.setLabels(labels);
-        dao.ofy().put(comment);
+        final Entity comment = new Entity("Comment");
+        comment.setProperty("author", author);
+        comment.setProperty("body", body);
+        comment.setProperty("body_size", body.length());
+        comment.setProperty("labels", labels);
+        datastoreService.put(comment);
 
-        //        datastoreService.put(entity);
+        for (final String topic : prospectiveSearchService.listTopics("", 1000)) {
+            prospectiveSearchService.match(comment, topic);
+        }
+
+        //        final Comment comment = new Comment();
+        //        comment.setAuthor(author);
+        //        comment.setBody(body);
+        //        comment.setLength(body.length());
+        //        comment.setBody(body);
+        //        comment.setLabels(labels);
+        //        dao.ofy().put(comment);
+
     }
 
     @Override
@@ -325,12 +342,8 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         return users;
     }
 
-    private final ProspectiveSearchService prospectiveSearchService = ProspectiveSearchServiceFactory.getProspectiveSearchService();
-
-    // subscribe, unsubscribe, match
-
     @Override
-    public void subscribeProspectiveSearchOnXmppMessages(final String topic, final String subscriptionId, final String query) {
+    public void subscribeProspectiveSearchOnBodyField(final String topic, final String subscriptionId, final String query) {
 
         final HashMap<String, FieldType> schema = new HashMap<String, FieldType>();
         schema.put("body", FieldType.STRING);
@@ -373,6 +386,16 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
     @Override
     public void unsubscribeFromProspectiveSearch(final String topic, final String subId) {
         prospectiveSearchService.unsubscribe(topic, subId);
+    }
+
+    @Override
+    public String askChannelToken() {
+
+        final String clientId = "1";
+
+        final String token = channelService.createChannel(clientId);
+
+        return token;
     }
 
 

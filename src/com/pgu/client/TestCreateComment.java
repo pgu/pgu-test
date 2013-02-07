@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class TestB {
+public class TestCreateComment {
 
     private final GreetingServiceAsync greetingService  = GWT.create(GreetingService.class);
 

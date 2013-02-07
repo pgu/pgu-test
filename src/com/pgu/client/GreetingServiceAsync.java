@@ -37,7 +37,7 @@ public interface GreetingServiceAsync {
 
     void fetchAllUsers(AsyncCallback<ArrayList<XmppUser>> asyncCallback);
 
-    void subscribeProspectiveSearchOnXmppMessages(String topic, String subscriptionId, String query,
+    void subscribeProspectiveSearchOnBodyField(String topic, String subscriptionId, String query,
             AsyncCallback<Void> asyncCallback);
 
     void fetchTopics(AsyncCallback<ArrayList<String>> asyncCallback);
@@ -45,5 +45,7 @@ public interface GreetingServiceAsync {
     void fetchSubscriptions(String topic, AsyncCallback<ArrayList<PguSubscription>> asyncCallback);
 
     void unsubscribeFromProspectiveSearch(String topic, String subId, AsyncCallback<Void> asyncCallback);
+
+    void askChannelToken(AsyncCallback<String> asyncCallback);
 
 }

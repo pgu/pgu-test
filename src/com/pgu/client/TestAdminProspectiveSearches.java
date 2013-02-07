@@ -22,6 +22,9 @@ public class TestAdminProspectiveSearches {
 
     private final GreetingServiceAsync greetingService  = GWT.create(GreetingService.class);
 
+    private final HashMap<String, RadioButton> topic2radioBtn = new HashMap<String, RadioButton>();
+    private final HashMap<PguSubscription, RadioButton> subscription2radioBtn = new HashMap<PguSubscription, RadioButton>();
+
     final Label topicLabel = new Label("topic");
     final TextBox topicBox = new TextBox();
 
@@ -31,7 +34,7 @@ public class TestAdminProspectiveSearches {
     final Label queryLabel = new Label("query");
     final TextBox queryBox = new TextBox();
 
-    final Button subscribeProspectiveSearchBtn = new Button("Subscribe");
+    final Button subscribeProspectiveSearchBtn = new Button("Subscribe on body field");
     final Button unsubscribeProspectiveSearchBtn = new Button("Unsubscribe");
 
     final Button refreshTopicsBtn = new Button("Refresh Topics");
@@ -39,6 +42,8 @@ public class TestAdminProspectiveSearches {
 
     final FlowPanel topicsPanel = new FlowPanel();
     final FlowPanel subscriptionsPanel = new FlowPanel();
+
+    final FlowPanel liveResultsPanel = new FlowPanel();
 
     public VerticalPanel buildUI() {
 
@@ -69,6 +74,9 @@ public class TestAdminProspectiveSearches {
 
         // unsubscribe
         vp4.add(unsubscribeProspectiveSearchBtn);
+
+        // live results
+        vp4.add(liveResultsPanel);
 
         return vp4;
     }
@@ -113,9 +121,6 @@ public class TestAdminProspectiveSearches {
             }
         });
     }
-
-    private final HashMap<String, RadioButton> topic2radioBtn = new HashMap<String, RadioButton>();
-    private final HashMap<PguSubscription, RadioButton> subscription2radioBtn = new HashMap<PguSubscription, RadioButton>();
 
     private void refreshTopicsAction() {
         refreshTopicsBtn.addClickHandler(new ClickHandler() {
@@ -232,7 +237,7 @@ public class TestAdminProspectiveSearches {
                     return;
                 }
 
-                greetingService.subscribeProspectiveSearchOnXmppMessages(
+                greetingService.subscribeProspectiveSearchOnBodyField(
                         topic //
                         , subscriptionId //
                         , query //
@@ -256,5 +261,17 @@ public class TestAdminProspectiveSearches {
     public native void console(String msg) /*-{
         $wnd.console.log(msg);
     }-*/;
+
+    public void displayUpdate(final String body) {
+        final Label reply = new Label(body);
+
+        if (liveResultsPanel.getWidgetCount() == 0) {
+            liveResultsPanel.add(reply);
+
+        } else {
+            liveResultsPanel.insert(reply, 0);
+        }
+
+    }
 
 }

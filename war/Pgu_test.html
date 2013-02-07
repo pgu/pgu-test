@@ -5,6 +5,8 @@
     <link type="text/css" rel="stylesheet" href="Pgu_test.css">
     <title>Web Application Starter Project</title>
     
+    <script type="text/javascript" src="/_ah/channel/jsapi"></script>    
+    
     <script type="text/javascript" src="http://platform.linkedin.com/in.js">
       /*
       api_key: mv5b7t3squc2
@@ -14,7 +16,31 @@
       */
     </script>    
     
-        <script type="text/javascript">
+    <script type="text/javascript">
+        
+     function pgu_test_onOpened() {
+    	    console.log('channel is opened!');	 
+     }
+     
+     function pgu_test_onMessage(message) {
+    	 var msg = JSON.parse(message.data);
+    	 
+    	 pgu_geo_channel_on_message(msg.type, msg.body);
+     }
+     
+     function pgu_test_open_channel(token) {
+         var channel = new goog.appengine.Channel(token);
+         var handler = {
+           'onopen': pgu_test_onOpened,
+           'onmessage': pgu_test_onMessage,
+           'onerror': function() {},
+           'onclose': function() {}
+         };
+         var socket = channel.open(handler);
+         socket.onopen = pgu_test_onOpened;
+         socket.onmessage = pgu_test_onMessage;
+     }    
+        
 //     https://developer.linkedin.com/documents/javascript-api-tutorial
       function displayConnections(connections) {
         console.log(connections); 
@@ -67,7 +93,7 @@
 //               // AJAX call to pass back id to your server
 //             }
       }
-    
+
     </script>    
     <script type="text/javascript" language="javascript" src="pgu_test/pgu_test.nocache.js"></script>
   </head>

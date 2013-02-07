@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.channel.ChannelMessage;
+import com.google.appengine.api.channel.ChannelService;
+import com.google.appengine.api.channel.ChannelServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.prospectivesearch.ProspectiveSearchService;
+import com.google.appengine.api.prospectivesearch.ProspectiveSearchServiceFactory;
 import com.google.appengine.api.xmpp.JID;
 import com.google.appengine.api.xmpp.Message;
 import com.google.appengine.api.xmpp.XMPPService;
@@ -25,14 +31,17 @@ public class ReceiveXMPPServlet extends HttpServlet {
     private final DAO dao = new DAO();
     private final XmppHelper helper = new XmppHelper();
 
+    private final ChannelService channelService = ChannelServiceFactory.getChannelService();
+    private final ProspectiveSearchService prospectiveSearchService = ProspectiveSearchServiceFactory.getProspectiveSearchService();
+
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
 
         final XMPPService xmpp = XMPPServiceFactory.getXMPPService();
-        final Message message = xmpp.parseMessage(req);
+        final Message chatMessage = xmpp.parseMessage(req);
 
-        final JID fromJid = message.getFromJid();
-        final String body = message.getBody();
+        final JID fromJid = chatMessage.getFromJid();
+        final String body = chatMessage.getBody();
 
         final String fullJid = fromJid.getId();
 
@@ -44,8 +53,25 @@ public class ReceiveXMPPServlet extends HttpServlet {
         msg.setBody(body);
         msg.setTime(new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss").format(new Date()));
         dao.ofy().put(msg);
-
         //        datastoreService.put(entity);
+
+        // prospective search
+        final Entity tmpMsg = new Entity("xmpp_message");
+        tmpMsg.setProperty("body", body);
+
+        for (final String topic : prospectiveSearchService.listTopics("", 1000)) {
+            prospectiveSearchService.match(tmpMsg, topic);
+        }
+
+        // channel
+        final String channelMessage = //
+                "{\"type\":\"chat\",\"body\":\"" + //
+                body + " [ from " + fullJid + "]" + //
+                "\"}";
+
+        final String channelClientId = "1";
+        channelService.sendMessage(new ChannelMessage(channelClientId, channelMessage));
+
     }
 
 

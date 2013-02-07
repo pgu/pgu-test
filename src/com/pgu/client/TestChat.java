@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -23,6 +24,8 @@ public class TestChat {
     private final GreetingServiceAsync greetingService  = GWT.create(GreetingService.class);
 
     private final HashMap<XmppUser, RadioButton> user2radioButton = new HashMap<XmppUser, RadioButton>();
+    private final HashMap<XmppUser, FlowPanel> user2replyPanel = new HashMap<XmppUser, FlowPanel>();
+
 
     // invite a user
     final Label addresseeLabel = new Label("Addressee");
@@ -38,6 +41,9 @@ public class TestChat {
     // panel of chat users
     final HTMLPanel chatUsersPanel = new HTMLPanel("");
     final Button refreshChatsUserBtn = new Button("Refresh");
+
+    // replies from the channel api
+    final FlowPanel userRepliesPanel = new FlowPanel();
 
     public VerticalPanel buildUI() {
 
@@ -64,6 +70,9 @@ public class TestChat {
         // chat users (selection, user jid, user presence status, subscription status)
         vp3.add(refreshChatsUserBtn);
         vp3.add(chatUsersPanel);
+
+        // live chat panels
+        vp3.add(userRepliesPanel);
 
         return vp3;
     }
@@ -182,6 +191,17 @@ public class TestChat {
                 });
             }
         });
+    }
+
+    public void displayReply(final String body) {
+        final Label reply = new Label(body);
+
+        if (userRepliesPanel.getWidgetCount() == 0) {
+            userRepliesPanel.add(reply);
+
+        } else {
+            userRepliesPanel.insert(reply, 0);
+        }
     }
 
 }

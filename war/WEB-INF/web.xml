@@ -93,6 +93,19 @@
   </servlet>
 
 <!--  -->
+<!-- Channel service -->  
+<!--  -->
+  <servlet>
+    <servlet-name>channelConnected</servlet-name>
+    <servlet-class>com.pgu.server.ChannelConnectedServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>channelDisconnected</servlet-name>
+    <servlet-class>com.pgu.server.ChannelDisconnectedServlet</servlet-class>
+  </servlet>
+
+<!--  -->
 <!--  -->
 <!-- servlet mappings -->  
 <!--  -->
@@ -177,6 +190,19 @@
   <servlet-mapping>
     <servlet-name>matches</servlet-name>
     <url-pattern>/_ah/prospective_search</url-pattern>
+  </servlet-mapping>  
+
+<!--  -->
+<!-- Channel service -->  
+<!--  -->
+  <servlet-mapping>
+    <servlet-name>channelConnected</servlet-name>
+    <url-pattern>/_ah/channel/connected/</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet-mapping>
+    <servlet-name>channelDisconnected</servlet-name>
+    <url-pattern>/_ah/channel/disconnected/</url-pattern>
   </servlet-mapping>  
   
 <!--  -->

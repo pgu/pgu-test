@@ -38,11 +38,13 @@ public interface GreetingService extends RemoteService {
 
     ArrayList<XmppUser> fetchAllUsers();
 
-    void subscribeProspectiveSearchOnXmppMessages(String topic, String subscriptionId, String query);
+    void subscribeProspectiveSearchOnBodyField(String topic, String subscriptionId, String query);
 
     ArrayList<String> fetchTopics();
 
     ArrayList<PguSubscription> fetchSubscriptions(String topic);
 
     void unsubscribeFromProspectiveSearch(String topic, String subId);
+
+    String askChannelToken();
 }
