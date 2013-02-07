@@ -47,11 +47,14 @@ public class MatchResponseServlet extends HttpServlet {
 
             for (final String reqSubID : reqSubIDs) {
 
+                final String body = (String) matchedEntity.getProperty("body");
+
                 final String channelMessage = //
                         "{\"type\":\"search\",\"body\":\"" + //
                         "The entity of type '" + matchedEntity.getKey().getKind() + //
                         "' and with the id '" + matchedEntity.getKey().getId() + //
                         "' is positive for the subscription '" + reqSubID + //
+                        "': '" + body + //
                         "'\"}";
 
                 final String channelClientId = "1";
