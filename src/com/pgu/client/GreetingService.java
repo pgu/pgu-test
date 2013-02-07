@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.pgu.shared.PguSubscription;
 import com.pgu.shared.XmppUser;
 
 /**
@@ -35,5 +36,13 @@ public interface GreetingService extends RemoteService {
 
     void inviteToChat(String text);
 
-    ArrayList<XmppUser> fetchAllConnectedUsers();
+    ArrayList<XmppUser> fetchAllUsers();
+
+    void subscribeProspectiveSearchOnXmppMessages(String topic, String subscriptionId, String query);
+
+    ArrayList<String> fetchTopics();
+
+    ArrayList<PguSubscription> fetchSubscriptions(String topic);
+
+    void unsubscribeFromProspectiveSearch(String topic, String subId);
 }

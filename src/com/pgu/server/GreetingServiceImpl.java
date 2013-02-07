@@ -6,14 +6,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
-import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.prospectivesearch.FieldType;
+import com.google.appengine.api.prospectivesearch.ProspectiveSearchService;
+import com.google.appengine.api.prospectivesearch.ProspectiveSearchServiceFactory;
+import com.google.appengine.api.prospectivesearch.Subscription;
+import com.google.appengine.api.prospectivesearch.Subscription.State;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.GeoPoint;
@@ -32,8 +34,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
 import com.pgu.shared.Book;
+import com.pgu.shared.Comment;
 import com.pgu.shared.FieldVerifier;
 import com.pgu.shared.MyLocation;
+import com.pgu.shared.PguSubscription;
 import com.pgu.shared.XmppUser;
 
 /**
@@ -42,7 +46,7 @@ import com.pgu.shared.XmppUser;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
-    private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+    //    private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 
     private final DAO dao = new DAO();
 
@@ -262,19 +266,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
     @Override
     public void putComment(final String author, final String body, final String labels) {
 
-        final Entity entity = new Entity("comment", "example");
+        final Comment comment = new Comment();
+        comment.setAuthor(author);
+        comment.setBody(body);
+        comment.setLength(body.length());
+        comment.setBody(body);
+        comment.setLabels(labels);
+        dao.ofy().put(comment);
 
-        entity.setProperty("author", author);
-
-        // Use Text to store long strings in the datastore.
-        entity.setProperty("body", new Text(body));
-        entity.setProperty("length", body.length());
-
-        final String[] _labels = labels.split(", ");
-        entity.setProperty("labels", Arrays.asList(_labels));
-
-        datastoreService.put(entity);
-
+        //        datastoreService.put(entity);
     }
 
     @Override
@@ -312,9 +312,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
     }
 
     @Override
-    public ArrayList<XmppUser> fetchAllConnectedUsers() {
+    public ArrayList<XmppUser> fetchAllUsers() {
 
-        final QueryResultIterable<XmppUser> queryResult = dao.ofy().query(XmppUser.class).filter("presenceStatus =", "available").fetch();
+        final QueryResultIterable<XmppUser> queryResult = dao.ofy().query(XmppUser.class).fetch();
         final QueryResultIterator<XmppUser> iterator = queryResult.iterator();
 
         final ArrayList<XmppUser> users = new ArrayList<XmppUser>();
@@ -325,8 +325,55 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         return users;
     }
 
+    private final ProspectiveSearchService prospectiveSearchService = ProspectiveSearchServiceFactory.getProspectiveSearchService();
 
+    // subscribe, unsubscribe, match
 
+    @Override
+    public void subscribeProspectiveSearchOnXmppMessages(final String topic, final String subscriptionId, final String query) {
+
+        final HashMap<String, FieldType> schema = new HashMap<String, FieldType>();
+        schema.put("body", FieldType.STRING);
+
+        //        String topic = "Person";
+        //        String subscriptionId = "SearchPersonByName";
+        //        long leaseTimeInMilliseconds = 24 * 60 * 60 * 1000;
+        //        String query = "name:Adriaan";
+        //
+        prospectiveSearchService.subscribe(topic, subscriptionId, //
+                0, query, schema);
+    }
+
+    @Override
+    public ArrayList<String> fetchTopics() {
+        return new ArrayList<String>(prospectiveSearchService.listTopics("", 1000));
+    }
+
+    @Override
+    public ArrayList<PguSubscription> fetchSubscriptions(final String topic) {
+        final ArrayList<PguSubscription> pguSubs = new ArrayList<PguSubscription>();
+
+        final List<Subscription> subscriptions = prospectiveSearchService.listSubscriptions(topic);
+        for (final Subscription sub : subscriptions) {
+
+            final PguSubscription pguSub = new PguSubscription();
+            pguSub.setId(sub.getId());
+            pguSub.setQuery(sub.getQuery());
+
+            final State state = sub.getState();
+            pguSub.setState(state == null ? "" : state.toString());
+
+            pguSub.setFullDescription(sub.toString());
+            pguSubs.add(pguSub);
+        }
+
+        return pguSubs;
+    }
+
+    @Override
+    public void unsubscribeFromProspectiveSearch(final String topic, final String subId) {
+        prospectiveSearchService.unsubscribe(topic, subId);
+    }
 
 
 

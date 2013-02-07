@@ -3,6 +3,7 @@ package com.pgu.client;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pgu.shared.PguSubscription;
 import com.pgu.shared.XmppUser;
 
 /**
@@ -34,6 +35,15 @@ public interface GreetingServiceAsync {
 
     void inviteToChat(String text, AsyncCallback<Void> asyncCallback);
 
-    void fetchAllConnectedUsers(AsyncCallback<ArrayList<XmppUser>> asyncCallback);
+    void fetchAllUsers(AsyncCallback<ArrayList<XmppUser>> asyncCallback);
+
+    void subscribeProspectiveSearchOnXmppMessages(String topic, String subscriptionId, String query,
+            AsyncCallback<Void> asyncCallback);
+
+    void fetchTopics(AsyncCallback<ArrayList<String>> asyncCallback);
+
+    void fetchSubscriptions(String topic, AsyncCallback<ArrayList<PguSubscription>> asyncCallback);
+
+    void unsubscribeFromProspectiveSearch(String topic, String subId, AsyncCallback<Void> asyncCallback);
 
 }

@@ -25,7 +25,7 @@ public class UnsubscribedXMPPServlet extends HttpServlet {
     }
 
     private void subscribed(final XmppUser user) {
-        log.info("unsubscribed: " + user.getBareJid());
+        log.info("unsubscribed: " + user.getFullJid());
         user.setSubscriptionStatus("subscribed");
         dao.ofy().put(user);
     }

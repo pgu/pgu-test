@@ -13,7 +13,6 @@ public class XmppUser implements IsSerializable {
 
     @Id
     private String fullJid;
-    private String bareJid;
     private String subscriptionStatus;
     private String presenceStatus;
 
@@ -58,14 +57,6 @@ public class XmppUser implements IsSerializable {
 
     public void setFullJid(final String fullJid) {
         this.fullJid = fullJid;
-    }
-
-    public String getBareJid() {
-        return bareJid;
-    }
-
-    public void setBareJid(final String bareJid) {
-        this.bareJid = bareJid;
     }
 
     public void setSubscriptionStatus(final String subscriptionStatus) {

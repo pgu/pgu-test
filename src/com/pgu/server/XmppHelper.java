@@ -21,9 +21,8 @@ public class XmppHelper {
 
         final JID jid = subscription.getFromJid();
         final String fullJid = jid.getId();
-        final String bareJid = toBareJid(fullJid);
 
-        return findUser(fullJid, bareJid);
+        return findUser(fullJid);
     }
 
     public String toBareJid(final String fullJid) {
@@ -32,14 +31,13 @@ public class XmppHelper {
         return fullJid.split("/")[0];
     }
 
-    private XmppUser findUser(final String fullJid, final String bareJid) {
+    private XmppUser findUser(final String fullJid) {
 
         final XmppUser user = dao.ofy().find(XmppUser.class, fullJid);
         if (user == null) {
 
             final XmppUser new_user = new XmppUser();
             new_user.setFullJid(fullJid);
-            new_user.setBareJid(bareJid);
             dao.ofy().put(new_user);
             return new_user;
 
@@ -65,9 +63,8 @@ public class XmppHelper {
 
         final JID jid = presence.getFromJid();
         final String fullJid = jid.getId();
-        final String bareJid = toBareJid(fullJid);
 
-        return findUser(fullJid, bareJid);
+        return findUser(fullJid);
     }
 
     private Presence parsePresence(final HttpServletRequest req) {

@@ -25,7 +25,7 @@ public class ProbeXMPPServlet extends HttpServlet {
     }
 
     private void setProbe(final XmppUser user) {
-        log.info("probe: " + user.getBareJid());
+        log.info("probe: " + user.getFullJid());
         user.setPresenceStatus("probe");
         dao.ofy().put(user);
     }

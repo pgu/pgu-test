@@ -25,7 +25,7 @@ public class SubscribeXMPPServlet extends HttpServlet {
     }
 
     private void subscribe(final XmppUser user) {
-        log.info("subscribe: " + user.getBareJid());
+        log.info("subscribe: " + user.getFullJid());
         user.setSubscriptionStatus("subscribe");
         dao.ofy().put(user);
     }

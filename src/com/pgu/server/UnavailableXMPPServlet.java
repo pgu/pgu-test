@@ -25,7 +25,7 @@ public class UnavailableXMPPServlet extends HttpServlet {
     }
 
     private void setUnavailable(final XmppUser user) {
-        log.info("unavailable: " + user.getBareJid());
+        log.info("unavailable: " + user.getFullJid());
         user.setPresenceStatus("unavailable");
         dao.ofy().put(user);
     }

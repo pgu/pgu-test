@@ -26,7 +26,7 @@ public class AvailableXMPPServlet extends HttpServlet {
     }
 
     private void setAvailable(final XmppUser user) {
-        log.info("available: " + user.getBareJid());
+        log.info("available: " + user.getFullJid());
         user.setPresenceStatus("available");
         dao.ofy().put(user);
     }
