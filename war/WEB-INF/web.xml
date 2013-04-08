@@ -5,27 +5,211 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
-  <!-- Servlets -->
+<!--  -->
+<!--  -->
+<!-- servlets -->  
+<!--  -->
+<!--  -->
+
+<!--  -->
+<!-- RPC -->  
+<!--  -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
     <servlet-class>com.pgu.server.GreetingServiceImpl</servlet-class>
   </servlet>
+
+<!--  -->
+<!-- Mail -->  
+<!--  -->
   <servlet>
     <servlet-name>sendMail</servlet-name>
     <servlet-class>com.pgu.server.SendMailServlet</servlet-class>
   </servlet>
+
+<!--  -->
+<!-- Xmpp -->  
+<!--  -->
+<!-- Messages xmpp -->  
+  <servlet>
+    <servlet-name>sendXmpp</servlet-name>
+    <servlet-class>com.pgu.server.SendXMPPServlet</servlet-class>
+  </servlet>
   
+  <servlet>
+    <servlet-name>receiveXmpp</servlet-name>
+    <servlet-class>com.pgu.server.ReceiveXMPPServlet</servlet-class>
+  </servlet>
+  
+<!-- Subscriptions xmpp -->  
+  <servlet>
+    <servlet-name>subscribeXmpp</servlet-name>
+    <servlet-class>com.pgu.server.SubscribeXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>subscribedXmpp</servlet-name>
+    <servlet-class>com.pgu.server.SubscribedXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>unsubscribeXmpp</servlet-name>
+    <servlet-class>com.pgu.server.UnsubscribeXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>unsubscribedXmpp</servlet-name>
+    <servlet-class>com.pgu.server.UnsubscribedXMPPServlet</servlet-class>
+  </servlet>
+  
+<!-- Presences xmpp -->  
+  <servlet>
+    <servlet-name>availableXmpp</servlet-name>
+    <servlet-class>com.pgu.server.AvailableXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>unavailableXmpp</servlet-name>
+    <servlet-class>com.pgu.server.UnavailableXMPPServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>probeXmpp</servlet-name>
+    <servlet-class>com.pgu.server.ProbeXMPPServlet</servlet-class>
+  </servlet>
+  
+<!-- Error xmpp -->  
+  <servlet>
+    <servlet-name>errorXmpp</servlet-name>
+    <servlet-class>com.pgu.server.ErrorXMPPServlet</servlet-class>
+  </servlet>
+
+<!--  -->
+<!-- Prospective search -->  
+<!--  -->
+  <servlet>
+    <servlet-name>matches</servlet-name>
+    <servlet-class>com.pgu.server.MatchResponseServlet</servlet-class>
+  </servlet>
+
+<!--  -->
+<!-- Channel service -->  
+<!--  -->
+  <servlet>
+    <servlet-name>channelConnected</servlet-name>
+    <servlet-class>com.pgu.server.ChannelConnectedServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>channelDisconnected</servlet-name>
+    <servlet-class>com.pgu.server.ChannelDisconnectedServlet</servlet-class>
+  </servlet>
+
+<!--  -->
+<!--  -->
+<!-- servlet mappings -->  
+<!--  -->
+<!--  -->
+
+<!--  -->
+<!-- RPC -->  
+<!--  -->
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
     <url-pattern>/pgu_test/greet</url-pattern>
   </servlet-mapping>
   
+<!--  -->
+<!-- Mail -->  
+<!--  -->
   <servlet-mapping>
     <servlet-name>sendMail</servlet-name>
     <url-pattern>/sendMail</url-pattern>
   </servlet-mapping>
   
-  <!-- Default page to serve -->
+<!--  -->
+<!-- Xmpp -->  
+<!--  -->
+<!-- Messages xmpp -->  
+  <servlet-mapping>
+    <servlet-name>sendXmpp</servlet-name>
+    <url-pattern>/sendXmpp</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>receiveXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/message/chat/</url-pattern>
+  </servlet-mapping>
+  
+<!-- Subscriptions xmpp -->    
+  <servlet-mapping>
+    <servlet-name>subscribeXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/subscription/subscribe/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>subscribedXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/subscription/subscribed/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>unsubscribeXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/subscription/unsubscribe/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>unsubscribedXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/subscription/unsubscribed/</url-pattern>
+  </servlet-mapping>
+  
+<!-- Presences xmpp -->  
+  <servlet-mapping>
+    <servlet-name>availableXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/presence/available/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>unavailableXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/presence/unavailable/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>probeXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/presence/probe/</url-pattern>
+  </servlet-mapping>
+  
+<!-- Error xmpp -->  
+  <servlet-mapping>
+    <servlet-name>errorXmpp</servlet-name>
+    <url-pattern>/_ah/xmpp/error/</url-pattern>
+  </servlet-mapping>
+
+<!--  -->
+<!-- Prospective search -->  
+<!--  -->
+  <servlet-mapping>
+    <servlet-name>matches</servlet-name>
+    <url-pattern>/_ah/prospective_search</url-pattern>
+  </servlet-mapping>  
+
+<!--  -->
+<!-- Channel service -->  
+<!--  -->
+  <servlet-mapping>
+    <servlet-name>channelConnected</servlet-name>
+    <url-pattern>/_ah/channel/connected/</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet-mapping>
+    <servlet-name>channelDisconnected</servlet-name>
+    <url-pattern>/_ah/channel/disconnected/</url-pattern>
+  </servlet-mapping>  
+  
+<!--  -->
+<!--  -->
+<!-- Default page to serve -->
+<!--  -->
+<!--  -->
   <welcome-file-list>
     <welcome-file>Pgu_test.html</welcome-file>
   </welcome-file-list>

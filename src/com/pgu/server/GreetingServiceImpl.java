@@ -6,8 +6,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import com.google.appengine.api.channel.ChannelService;
+import com.google.appengine.api.channel.ChannelServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.prospectivesearch.FieldType;
+import com.google.appengine.api.prospectivesearch.ProspectiveSearchService;
+import com.google.appengine.api.prospectivesearch.ProspectiveSearchServiceFactory;
+import com.google.appengine.api.prospectivesearch.Subscription;
+import com.google.appengine.api.prospectivesearch.Subscription.State;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.GeoPoint;
@@ -16,12 +29,20 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SearchServiceFactory;
+import com.google.appengine.api.xmpp.JID;
+import com.google.appengine.api.xmpp.Message;
+import com.google.appengine.api.xmpp.MessageBuilder;
+import com.google.appengine.api.xmpp.SendResponse;
+import com.google.appengine.api.xmpp.XMPPService;
+import com.google.appengine.api.xmpp.XMPPServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Query;
 import com.pgu.client.GreetingService;
 import com.pgu.shared.Book;
 import com.pgu.shared.FieldVerifier;
 import com.pgu.shared.MyLocation;
+import com.pgu.shared.PguSubscription;
+import com.pgu.shared.XmppUser;
 
 /**
  * The server side implementation of the RPC service.
@@ -29,7 +50,12 @@ import com.pgu.shared.MyLocation;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
+    private final DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+
     private final DAO dao = new DAO();
+
+    private final ProspectiveSearchService prospectiveSearchService = ProspectiveSearchServiceFactory.getProspectiveSearchService();
+    private final ChannelService channelService = ChannelServiceFactory.getChannelService();
 
     @Override
     public String greetServer(String input) throws IllegalArgumentException {
@@ -48,7 +74,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         userAgent = escapeHtml(userAgent);
 
         return "Hello, " + input + "!<br><br>I am running " + serverInfo + ".<br><br>It looks like you are using:<br>"
-                + userAgent;
+        + userAgent;
     }
 
     /**
@@ -243,4 +269,161 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
         return results;
     }
+
+    @Override
+    public void putComment(final String author, final String body, final String labels) {
+
+        final Entity comment = new Entity("Comment");
+        comment.setProperty("author", author);
+        comment.setProperty("body", body);
+        comment.setProperty("body_size", body.length());
+        comment.setProperty("labels", labels);
+        datastoreService.put(comment);
+
+        for (final String topic : prospectiveSearchService.listTopics("", 1000)) {
+            prospectiveSearchService.match(comment, topic);
+        }
+
+        //        final Comment comment = new Comment();
+        //        comment.setAuthor(author);
+        //        comment.setBody(body);
+        //        comment.setLength(body.length());
+        //        comment.setBody(body);
+        //        comment.setLabels(labels);
+        //        dao.ofy().put(comment);
+
+    }
+
+    @Override
+    public void inviteToChat(final String bareJid) {
+
+        final JID jid = new JID(bareJid);
+
+        final XMPPService xmppService = XMPPServiceFactory.getXMPPService();
+        xmppService.sendInvitation(jid);
+    }
+
+    @Override
+    public String sendChatMessage(final String text, final String selectedChatUserFullJid) {
+        final JID jid = new JID(selectedChatUserFullJid);
+
+        final Message message = new MessageBuilder() //
+        .withRecipientJids(jid) //
+        .withBody(text) //
+        .build();
+
+        final XMPPService xmppService = XMPPServiceFactory.getXMPPService();
+
+        if (xmppService.getPresence(jid).isAvailable()) {
+            final SendResponse sendResponse = xmppService.sendMessage(message);
+
+            if (sendResponse.getStatusMap().get(jid) == SendResponse.Status.SUCCESS) {
+                return "OK";
+            } else {
+                return "NOT OK";
+            }
+
+        } else {
+            return "Unavailable";
+        }
+    }
+
+    @Override
+    public ArrayList<XmppUser> fetchAllUsers() {
+
+        final QueryResultIterable<XmppUser> queryResult = dao.ofy().query(XmppUser.class).fetch();
+        final QueryResultIterator<XmppUser> iterator = queryResult.iterator();
+
+        final ArrayList<XmppUser> users = new ArrayList<XmppUser>();
+        while (iterator.hasNext()) {
+            users.add(iterator.next());
+        }
+
+        return users;
+    }
+
+    @Override
+    public void subscribeProspectiveSearchOnBodyField(final String topic, final String subscriptionId, final String query) {
+
+        final HashMap<String, FieldType> schema = new HashMap<String, FieldType>();
+        schema.put("body", FieldType.STRING);
+
+        //        String topic = "Person";
+        //        String subscriptionId = "SearchPersonByName";
+        //        long leaseTimeInMilliseconds = 24 * 60 * 60 * 1000;
+        //        String query = "name:Adriaan";
+        //
+        prospectiveSearchService.subscribe(topic, subscriptionId, //
+                0, query, schema);
+    }
+
+    @Override
+    public ArrayList<String> fetchTopics() {
+        return new ArrayList<String>(prospectiveSearchService.listTopics("", 1000));
+    }
+
+    @Override
+    public ArrayList<PguSubscription> fetchSubscriptions(final String topic) {
+        final ArrayList<PguSubscription> pguSubs = new ArrayList<PguSubscription>();
+
+        final List<Subscription> subscriptions = prospectiveSearchService.listSubscriptions(topic);
+        for (final Subscription sub : subscriptions) {
+
+            final PguSubscription pguSub = new PguSubscription();
+            pguSub.setId(sub.getId());
+            pguSub.setQuery(sub.getQuery());
+
+            final State state = sub.getState();
+            pguSub.setState(state == null ? "" : state.toString());
+
+            pguSub.setFullDescription(sub.toString());
+            pguSubs.add(pguSub);
+        }
+
+        return pguSubs;
+    }
+
+    @Override
+    public void unsubscribeFromProspectiveSearch(final String topic, final String subId) {
+        prospectiveSearchService.unsubscribe(topic, subId);
+    }
+
+    @Override
+    public String askChannelToken() {
+
+        final String clientId = "1";
+
+        final String token = channelService.createChannel(clientId);
+
+        return token;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

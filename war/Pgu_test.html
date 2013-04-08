@@ -4,6 +4,97 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link type="text/css" rel="stylesheet" href="Pgu_test.css">
     <title>Web Application Starter Project</title>
+    
+    <script type="text/javascript" src="/_ah/channel/jsapi"></script>    
+    
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+      /*
+      api_key: mv5b7t3squc2
+      authorize: true
+      scope: r_fullprofile r_network
+      onLoad: onLinkedInLoad
+      */
+    </script>    
+    
+    <script type="text/javascript">
+        
+     function pgu_test_onOpened() {
+    	    console.log('channel is opened!');	 
+     }
+     
+     function pgu_test_onMessage(message) {
+    	 var msg = JSON.parse(message.data);
+    	 
+    	 pgu_geo_channel_on_message(msg.type, msg.body);
+     }
+     
+     function pgu_test_open_channel(token) {
+         var channel = new goog.appengine.Channel(token);
+         var handler = {
+           'onopen': pgu_test_onOpened,
+           'onmessage': pgu_test_onMessage,
+           'onerror': function() {},
+           'onclose': function() {}
+         };
+         var socket = channel.open(handler);
+         socket.onopen = pgu_test_onOpened;
+         socket.onmessage = pgu_test_onMessage;
+     }    
+        
+//     https://developer.linkedin.com/documents/javascript-api-tutorial
+      function displayConnections(connections) {
+        console.log(connections); 
+      }  
+    
+    
+      function displayProfiles(profiles) {
+        console.log(profiles); 
+        
+        var member = profiles.values[0];
+        var msg = member.id + ", Hello " +  member.firstName + " " + member.lastName;
+        console.log(msg); 
+      }
+      
+      function onLinkedInLoad() {
+          console.log(" in load");
+          
+          IN.Event.on(IN, "auth", onLinkedInAuth);
+      }
+    
+      function onLinkedInAuth() {
+          console.log(" in auth");
+          
+        IN.API.Profile("me")
+          .fields(
+                  "id" //
+                  , "first-name" //
+                  , "last-name" //
+                  , "headline" //
+                  , "location" //
+                  , "numConnections" //
+                  , "numConnectionsCapped" //
+                  , "summary" //
+                  , "specialties" //
+                  , "pictureUrl" //
+                  , "publicProfileUrl" //
+                  , "positions:(id,company,endDate,isCurrent,startDate,summary,title,location)" //
+                  , "languages:(language,proficiency)" //
+                  , "educations" //
+          )
+          .result(displayProfiles);
+        
+          IN.API.Connections("me")
+          .fields("firstName", "lastName", "location")
+          .result(displayConnections);
+        
+//         function(me) {
+//             var id = me.values[0].id;
+//             console.log(me);
+//               // AJAX call to pass back id to your server
+//             }
+      }
+
+    </script>    
     <script type="text/javascript" language="javascript" src="pgu_test/pgu_test.nocache.js"></script>
   </head>
   <body>
@@ -14,5 +105,8 @@
         in order for this application to display correctly.
       </div>
     </noscript>
+    
+<!--     <script type="IN/Login"></script> -->
+    
   </body>
 </html>
