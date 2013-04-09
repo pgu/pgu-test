@@ -2,9 +2,11 @@
 <head>
 <style>
     .btn {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         cursor: pointer;
+        margin: 10px;
+        display: inline-block;
     }
     .show {
         background-color: #CCC;
@@ -13,7 +15,7 @@
         background-color: #DDD;
     }
     .fullslidecanvas {
-        background-color: #EEE;
+        background-color: #000;
         position: absolute;
         width: 100%;
         height: 100%;
@@ -29,26 +31,12 @@
 
 <div style="width:898px;height:698px;position:relative;">
     <div id="three-model-render-container" class="fullslidecanvas">
-      <canvas width="898" height="696"></canvas>
     </div>
-</div>
+</div> 
 
 <script src="three.min.js"></script>
 <script src="ColladaLoader.js"></script>
 <script>
-//  function show3D() {
-//      var loader = new THREE.ColladaLoader();
-//      loader.load("sfeir.dae", function(collada) {
-//          var model = collada.scene;
-//          model.position=;
-//          model.rotation=;
-//          scene.add(model);
-         
-//      }, 
-//      function progress(p) {
-         
-//      });
-//  }
  
  function firstRender(id)
  {   
@@ -139,7 +127,7 @@
      loader.options.convertUpAxis= true;
      loader.options.upAxis = 'Y';
      
-     loader.load("sfeir.dae",
+     loader.load("sfeir2.dae",
              function(collada)
              {
                  var scale = new THREE.Vector3(3,3,3);
@@ -161,8 +149,11 @@
      {
          // signal death of this animation
          delete canvascontainer.animation;
-         if (canvascontainer.firstChild !== null)
-             canvascontainer.removeChild(canvascontainer.firstChild);
+         if (canvascontainer.firstChild !== null) {
+//              canvascontainer.removeChild(canvascontainer.firstChild); it does not work
+        	 canvascontainer.innerHTML = "";
+         }
+         
      }, 300);
  }
  
