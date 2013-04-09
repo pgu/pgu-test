@@ -6,6 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/objectify"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gwt-bootstrap"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/guava_14"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/guava"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

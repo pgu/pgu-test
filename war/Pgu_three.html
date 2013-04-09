@@ -25,12 +25,27 @@
 </style>
 </head>
 <body>
-<div class="btn show" onclick="firstRender('three-model-render-container');" >show</div>
+<!-- <div class="btn show" onclick="firstRender('three-model-render-container');" >show sfeir</div> -->
+<div class="btn show" onclick="firstRender('SF');" >show sf</div>
+<div class="btn show" onclick="firstRender('E');" >show e</div>
+<div class="btn show" onclick="firstRender('IR');" >show ir</div>
 
 <div class="btn hide" onclick="killFirstRender('three-model-render-container');" >hide</div>
 
-<div style="width:498px;height:398px;position:relative;">
-    <div id="three-model-render-container" class="fullslidecanvas">
+<!-- <div style="width:200px;height:200px;position:relative;"> -->
+<!--     <div id="three-model-render-container" class="fullslidecanvas"> -->
+<!--     </div> -->
+<!-- </div>  -->
+<div style="width:200px;height:200px;position:relative;">
+    <div id="SF" class="fullslidecanvas">
+    </div>
+</div> 
+<div style="width:400px;height:400px;position:relative;">
+    <div id="E" class="fullslidecanvas">
+    </div>
+</div> 
+<div style="width:200px;height:200px;position:relative;">
+    <div id="IR" class="fullslidecanvas">
     </div>
 </div> 
 
@@ -88,10 +103,16 @@
      {
      
      case "three-model-render-container":
-         firstLoadAndroid(scene);
+         firstLoadAndroid(scene, "sfeir2.dae");
          break;
-     case "three-free-render-container":
-         firstLoadAndroidTextured(scene);
+     case "SF":
+         firstLoadAndroid(scene, "SF.dae");
+         break;
+     case "E":
+         firstLoadAndroid(scene, "E.dae");
+         break;
+     case "IR":
+         firstLoadAndroid(scene, "IR.dae");
          break;
      default:
          firstLoadCube(scene);
@@ -121,16 +142,17 @@
      requestAnimationFrame(anim);
  }
 
- function firstLoadAndroid(scene)
+ function firstLoadAndroid(scene, file_name)
  {   
      var loader = new THREE.ColladaLoader();
      loader.options.convertUpAxis= true;
      loader.options.upAxis = 'Y';
      
-     loader.load("sfeir2.dae",
+     loader.load(file_name,
              function(collada)
              {
-                 var scale = new THREE.Vector3(3,3,3);
+                 var scale = new THREE.Vector3(1,1,1);
+//                  var scale = new THREE.Vector3(3,3,3);
                  var model = collada.scene;
                  model.position.z = 0;
 //                  model.position.y = -80;
