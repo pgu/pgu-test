@@ -29,7 +29,7 @@
 
 <div class="btn hide" onclick="killFirstRender('three-model-render-container');" >hide</div>
 
-<div style="width:898px;height:698px;position:relative;">
+<div style="width:498px;height:398px;position:relative;">
     <div id="three-model-render-container" class="fullslidecanvas">
     </div>
 </div> 
@@ -65,7 +65,7 @@
      
      // camera
      var camera = new THREE.PerspectiveCamera(35, width / height, 1, 3000);
-     camera.position.z = 300;
+     camera.position.z = 300; // 300
      
      // scene
      var scene = new THREE.Scene();
@@ -133,7 +133,8 @@
                  var scale = new THREE.Vector3(3,3,3);
                  var model = collada.scene;
                  model.position.z = 0;
-                 model.position.y = -80;
+//                  model.position.y = -80;
+                 model.position.y = -20;
                  model.scale.copy(scale);
                  //model.rotation.copy(rotation);
                  model.name = "mymodel-sfeir";
