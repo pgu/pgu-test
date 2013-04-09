@@ -5,4 +5,6 @@ war/WEB-INF/deploy/
 war/WEB-INF/lib/
 war/WEB-INF/appengine-generated/
 .settings/com.google.gwt.eclipse.core.prefs
-
+.settings/com.google.appengine.eclipse.core.prefs
+.settings/com.google.gdt.eclipse.core.prefs
+.settings/com.google.gwt.eclipse.core.prefs
