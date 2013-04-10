@@ -42,7 +42,7 @@
             left: 0px;
         }
         .slides.template-default article.biglogo.sfeir {
-            background: url("wikeo_logo.png") no-repeat scroll 50% 50% white;
+            background: url("wikeo_logo2.png") no-repeat scroll 50% 50% white;
         }
         .slides.template-default > article:not(.nobackground):not(.biglogo){
             background:no-repeat scroll 710px 625px black !important;
@@ -55,7 +55,7 @@
             
 /*             background-color: white; */
              color: #E44B0F;
-            background-color: grey;
+            background-color: black;
 /*             color: red; */
             
             width: 393px;
@@ -78,7 +78,7 @@
             left: 505px;
             z-index: 10;
             
-            background-color: grey;
+            background-color: black;
 /*             color: red; */
 /*             background-color: white; */
             color: #E44B0F;
@@ -103,7 +103,7 @@
             left: 353px;
             z-index: 5;
             
-            background-color: grey;
+            background-color: black;
 /*             color: red; */
 /*             background-color: white; */
             color: #E44B0F;
@@ -134,6 +134,8 @@
             transform: translateX(337px); 
         }
         .rotate {
+            text-shadow: 1px 1px 2px black, 0 0 1em darkorange, 0 0 0.2em darkorange;
+        
             -moz-transform:rotate(180deg);
             -webkit-transform:rotate(180deg);
             -o-transform:rotate(180deg);
@@ -173,13 +175,79 @@
             width: 228px;
             height: 200px;
         }
+        
+        .container_android {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 0;
+            
+            background-color: black;
+            width: 310px;
+            height: 245px;
+        }
+        .container_gwt {
+            position: absolute;
+            top: 0px;
+            left: 614px;
+            z-index: 0;
+            
+            background-color: black;
+            width: 285px;
+            height: 245px;
+        }
+        
+        .static_android {
+            background: url("android_logo.jpg") no-repeat scroll 50% 50% black;
+            background-size: contain;
+            z-index: 500;
+        }
+        
+        .static_gwt {
+            background: url("gwt_logo.png") no-repeat scroll 50% 50% black;
+            background-size: contain;
+            z-index: 500;
+        }
+        
+        .container_angular {
+            position: absolute;
+            top: 452px;
+            left: 0px;
+            z-index: 0;
+            
+            background-color: black;
+            width: 310px;
+            height: 246px;
+        }
+        .container_dart {
+            position: absolute;
+            top: 452px;
+            left: 614px;
+            z-index: 0;
+            
+            background-color: black;
+            width: 284px;
+            height: 246px;
+        }
+        
+        .static_angular {
+            background: url("angular_logo.png") no-repeat scroll 50% 50% black;
+            background-size: contain;
+            z-index: 500;
+        }
+        
+        .static_dart {
+            background: url("dart_logo.png") no-repeat scroll 50% 50% black;
+            background-size: contain;
+            z-index: 500;
+        }
     </style>
   </head>
   <body style='display: none'>
 
     <section class='slides layout-regular template-default'>
       
-      <article class='biglogo sfeir'>
+      <article class='biglogo sfeir' onslideenter="clean_slide_sfeir();">
       </article>
 
 <!--       <article> -->
@@ -195,13 +263,18 @@
 <!--         </p> -->
 <!--       </article> -->
       
-      <article class="article_sfeir" onslideenter="doConsole();">
+      <article class="article_sfeir" onslideenter="doConsole();" onslideleave="clean_slide_sfeir();">
         <!-- <div class="btn show" onclick="firstRender('three-model-render-container');" >show sfeir</div> -->
 <!--         <div class="btn show" onclick="firstRender('SF');" >show sf</div> -->
 <!--         <div class="btn show" onclick="firstRender('E');" >show e</div> -->
 <!--         <div class="btn show" onclick="firstRender('IR');" >show ir</div> -->
         
 <!--         <div class="btn hide" onclick="killFirstRender('three-model-render-container');" >hide</div> -->
+        
+        <div id="container_android" class="container_android"></div>
+        <div id="container_gwt" class="container_gwt"></div>
+        <div id="container_android_static" class="container_android static_android" ></div>
+        <div id="container_gwt_static" class="container_gwt static_gwt"></div>
         
         <div id="container_SF" class="container_SF"></div>
         <div id="container_E" class="container_E"></div>
@@ -210,6 +283,11 @@
         <div id="open" class="open">[</div>
         <div id="middle" class="middle" onclick="open_sfeir();">≡</div>
         <div id="close" class="close">]</div>
+        
+        <div id="container_angular" class="container_angular"></div>
+        <div id="container_dart" class="container_dart"></div>
+        <div id="container_angular_static" class="container_angular static_angular" ></div>
+        <div id="container_dart_static" class="container_dart static_dart"></div>
         
         <!-- <div style="width:200px;height:200px;position:relative;"> -->
         <!--     <div id="three-model-render-container" class="fullslidecanvas"> -->
@@ -234,6 +312,11 @@
 
     <script>
     
+    $('#container_android_static').hide();
+    $('#container_gwt_static').hide();
+    $('#container_angular_static').hide();
+    $('#container_dart_static').hide();
+    
     function doConsole() {
     	console.log("on slide enter");
     }
@@ -243,16 +326,56 @@
         $('#close').addClass('go_to_right');	
         $('#middle').addClass('rotate');
         
-        $('#middle').delay(2200).fadeOut();
-        
         setTimeout(function() {
         	firstRender('container_SF');
-        	firstRender('container_E');
         	firstRender('container_IR');
-        }, 2600);
+        }, 2100);
+        
+        $('#middle').delay(2700).fadeOut('slow',
+    	    function() {
+            	firstRender('container_E');
+            }		
+        );
+        
+        setTimeout(function() {
+            $('#container_android_static').fadeIn('slow', 
+            		function() {
+                        setTimeout(function() {
+                            $('#container_android_static').fadeOut('slow', 
+                        		function() {
+                                	firstRender('container_android');
+                                });
+                        }, 2000);
+            });
+            $('#container_gwt_static').fadeIn('slow', 
+            		function() {
+                        setTimeout(function() {
+                            $('#container_gwt_static').fadeOut('slow', 
+                        		function() {
+                                	firstRender('container_gwt');
+                                });
+                        }, 3000);
+            });
+            $('#container_angular_static').fadeIn('slow', 
+            		function() {
+                        setTimeout(function() {
+                            $('#container_angular_static').fadeOut('slow', 
+                        		function() {
+                                	firstRender('container_angular');
+                                });
+                        }, 4000);
+            });
+            $('#container_dart_static').fadeIn('slow', 
+            		function() {
+                        setTimeout(function() {
+                            $('#container_dart_static').fadeOut('slow', 
+                        		function() {
+                                	firstRender('container_dart');
+                                });
+                        }, 5000);
+            });
+        }, 4100);
     }
-    
-    
     
     // 3D
      function firstRender(id)
@@ -303,7 +426,21 @@
          // textured cube
          switch (id)
          {
-         
+//          case "container_android":
+//              firstLoadAndroid(scene, "Android-s.dae");
+//              break;
+         case "container_android":
+        	 firstLoadCube(scene, "android_logo.jpg");
+        	 break;
+         case "container_gwt":
+        	 firstLoadCube(scene, "gwt_logo.png");
+        	 break;
+         case "container_angular":
+        	 firstLoadCube(scene, "angular_logo.png");
+        	 break;
+         case "container_dart":
+        	 firstLoadCube(scene, "dart_logo.png");
+        	 break;
          case "container_SF":
              firstLoadAlpha(scene, "SF.dae");
              break;
@@ -342,7 +479,14 @@
                  scene.traverse(function(object)
                  {
                      // models: slow rotation
-                     if (object instanceof THREE.Object3D && object.name.indexOf("mymodel-sfeir-e") >= 0)
+                     if (object instanceof THREE.Object3D && 
+                    		 (
+                    			   object.name.indexOf("mymodel-sfeir-e") >= 0
+                    			|| object.name.indexOf("mymodel-cube") >= 0
+                    		
+                    		 )
+                    		    		 
+                     )
                      {
                          object.rotation.y = (t-t0)/1000 - Math.PI/2;
                      };
@@ -354,7 +498,21 @@
          };
          requestAnimationFrame(anim);
      }
-    
+
+     function firstLoadCube(scene, file_name)
+     {
+         var texture = THREE.ImageUtils.loadTexture(file_name);
+         // textured cube
+         var cube = new THREE.Mesh(
+         new THREE.CubeGeometry(95, 95, 95),
+         new THREE.MeshLambertMaterial({map: texture}) );
+         cube.position.y = -7;
+         cube.rotation.x = 0.5;
+         cube.rotation.z = 0.5;
+         cube.name = file_name + "-mymodel-cube";
+         scene.add(cube);
+     } 
+     
      function firstLoadAlpha(scene, file_name)
      {   
          var loader = new THREE.ColladaLoader();
@@ -376,7 +534,7 @@
                      }
                      
                      model.scale.copy(scale);
-                     model.name = file_name + "-mymodel-sfeir";
+                     model.name = file_name + "-mymodel-sfeir-alpha";
                      scene.add(model);
                  } );
      }
@@ -409,15 +567,14 @@
          loader.load(file_name,
                  function(collada)
                  {
-                     var scale = new THREE.Vector3(1,1,1);
-    //                  var scale = new THREE.Vector3(3,3,3);
+//                      var scale = new THREE.Vector3(1,1,1);
+                     var scale = new THREE.Vector3(3,3,3);
                      var model = collada.scene;
                      model.position.z = 0;
-    //                  model.position.y = -80;
-                     model.position.y = -20;
+                     model.position.y = -80;
                      model.scale.copy(scale);
                      //model.rotation.copy(rotation);
-                     model.name = "mymodel-sfeir";
+                     model.name = "android-mymodel-sfeir";
                      scene.add(model);
                  } );
      }
@@ -438,6 +595,30 @@
          }, 300);
      }
      
+     function clean_slide_sfeir() {
+	    $('#container_android_static').hide();
+	    $('#container_gwt_static').hide();
+	    $('#container_angular_static').hide();
+	    $('#container_dart_static').hide();
+
+    	 killFirstRender('container_android');
+    	 killFirstRender('container_gwt');
+    	 killFirstRender('container_angular');
+    	 killFirstRender('container_dart');
+    	 
+    	 killFirstRender('container_SF');
+    	 killFirstRender('container_E');
+    	 killFirstRender('container_IR');
+    	 
+         $('#open').removeClass('go_to_left');    
+         $('#close').removeClass('go_to_right');    
+         $('#middle').removeClass('rotate');
+         
+         $('#open').fadeIn();    
+         $('#close').fadeIn();    
+         $('#middle').fadeIn();
+
+     }
     </script>
 
   </body>
