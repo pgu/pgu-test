@@ -157,13 +157,13 @@
         }
         .container_E {
             position: absolute;
-            top: 98px;
+            top: 0px;
             left: 314px;
             z-index: 0;
             
             background-color: black;
             width: 300px;
-            height: 500px;
+            height: 698px;
             
             cursor: pointer; 
         }
@@ -333,7 +333,7 @@
     $('#container_angular_static').hide();
     $('#container_dart_static').hide();
     
-    var mouse_x, mouse_y, intervalID;
+    var mouse_x, mouse_y, interval_id_for_mouse;
 
     function follow_the_mouse() {
     	
@@ -391,7 +391,7 @@
              mouse_y = e.clientY; // pageY
     	});
     	
-    	intervalID = setInterval(function() {
+    	interval_id_for_mouse = setInterval(function() {
     		 follow_the_mouse();
     	 }, 100);
     }
@@ -626,10 +626,10 @@
          loader.load(file_name,
                  function(collada)
                  {
-                     var scale = new THREE.Vector3(1.5,1.5,1.5);
+                     var scale = new THREE.Vector3(1,1,1);
                      var model = collada.scene;
                      model.position.z = 0;
-                     model.position.y = -30;
+                     model.position.y = -20;
                      model.scale.copy(scale);
                      model.name = "mymodel-sfeir-e";
                      
@@ -703,8 +703,8 @@
          model_E = null;
          model_IR = null;
 
-         clearInterval(intervalID);
-         mouse_x = mouse_y = intervalID = null;
+         clearInterval(interval_id_for_mouse);
+         mouse_x = mouse_y = interval_id_for_mouse = null;
          
      }
 
