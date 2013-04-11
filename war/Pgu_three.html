@@ -279,7 +279,7 @@
         <div id="container_gwt_static" class="container_gwt static_gwt"></div>
         
         <div id="container_SF" class="container_SF"></div>
-        <div id="container_E" class="container_E"></div>
+        <div id="container_E" class="container_E" onclick="toggle_lift();"></div>
         <div id="container_IR" class="container_IR"></div>
         
         <div id="open" class="open">[</div>
@@ -334,7 +334,54 @@
     $('#container_dart_static').hide();
     
     var mouse_x, mouse_y, interval_id_for_mouse;
+    var interval_id_for_lift;
 
+    var is_lift_ON = false;
+    var is_lift_going_up = true;
+
+    function move_lift() {
+    	if (model_E == null) {
+    		return;
+    	}
+    	
+    	var current_y = model_E.position.y;
+    	
+    	if (is_lift_going_up) {
+    		if (current_y < 40) {
+        		model_E.position.y = current_y + 2;        		
+    		} else {
+        		model_E.position.y = current_y - 2;        		
+        		is_lift_going_up = false;	
+    		}
+    		
+    	} else {
+        	if (current_y > -80) {
+        		model_E.position.y = current_y - 2;        		
+        	} else {
+        		model_E.position.y = current_y + 2;        		
+        		is_lift_going_up = true;	
+        	}
+    	}
+    	
+    }
+    
+    function toggle_lift() {
+    	if (is_lift_ON) {
+    		is_lift_ON = false;
+    		
+    		// stop the lift
+    		clearInterval(interval_id_for_lift);
+    		
+    	} else {
+    		is_lift_ON = true;
+    		
+    		// starts the lift
+    		interval_id_for_lift = setInterval(function() {
+    			move_lift();
+    		}, 50);
+    	}
+    }
+    
     function follow_the_mouse() {
     	
         // SF
@@ -705,7 +752,10 @@
 
          clearInterval(interval_id_for_mouse);
          mouse_x = mouse_y = interval_id_for_mouse = null;
-         
+
+         is_lift_ON = false;
+         is_lift_going_up = true;
+         clearInterval(interval_id_for_lift);
      }
 
     </script>
