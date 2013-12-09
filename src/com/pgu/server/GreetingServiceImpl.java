@@ -153,11 +153,11 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
         final Document.Builder docBuilderA = Document.newBuilder();
         docBuilderA.addField(Field.newBuilder().setName("profile").setText(jsonProfileA));
-        getProfileIdx().add(docBuilderA.build());
+        getProfileIdx().put(docBuilderA.build());
 
         final Document.Builder docBuilderB = Document.newBuilder();
         docBuilderB.addField(Field.newBuilder().setName("profile").setText(jsonProfileB));
-        getProfileIdx().add(docBuilderB.build());
+        getProfileIdx().put(docBuilderB.build());
 
     }
 
@@ -231,7 +231,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
             docBuilder.addField(Field.newBuilder().setName(field_keywords).setText(keywords));
             docBuilder.addField(Field.newBuilder().setName(field_location).setGeoPoint(geoPoint));
 
-            getTestIdx().add(docBuilder.build());
+            getTestIdx().put(docBuilder.build());
         }
     }
 
