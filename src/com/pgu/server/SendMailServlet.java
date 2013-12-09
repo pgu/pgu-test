@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
@@ -23,14 +22,14 @@ public class SendMailServlet extends HttpServlet {
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException,
-            IOException {
+    IOException {
         LOGGER.info("do get...");
         doPost(req, resp);
     }
 
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException,
-            IOException {
+    IOException {
         try {
             sendMail();
         } catch (final MessagingException e) {
@@ -50,7 +49,8 @@ public class SendMailServlet extends HttpServlet {
         msg.setSubject("email subject");
         msg.setText("email body test\nsee this: http://pgu-calendar.appspot.com/\n");
 
-        Transport.send(msg);
+        // only for test
+        // Transport.send(msg);
 
     }
 
